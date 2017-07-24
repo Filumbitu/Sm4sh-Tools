@@ -1,6 +1,5 @@
 ﻿using FastColoredTextBoxNS;
 using SALT.Moveset.AnimCMD;
-using Sm4shCommand.Classes;
 using System;
 using System.Collections.Generic;
 using System.Drawing;

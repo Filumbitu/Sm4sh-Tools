@@ -39,7 +39,8 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>s4.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <Win32Resource>
@@ -59,65 +60,33 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="WeifenLuo.WinFormsUI.Docking, Version=2.16.0.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\Nodes\ParamListNode.cs" />
     <Compile Include="GUI\AboutBox.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="GUI\AboutBox.Designer.cs">
       <DependentUpon>AboutBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="Classes\Nodes\BaseNode.cs" />
-    <Compile Include="Classes\Nodes\ScriptNode.cs" />
-    <Compile Include="Classes\Nodes\DataNode.cs" />
     <Compile Include="GUI\CodeEditor.cs">
-      <SubType>Component</SubType>
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="GUI\CodeEditor.Designer.cs">
       <DependentUpon>CodeEditor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\ParamEditor.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="GUI\ParamEditor.Designer.cs">
-      <DependentUpon>ParamEditor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\ProjectWizard.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\ProjectWizard.Designer.cs">
-      <DependentUpon>ProjectWizard.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Runtime.cs" />
-    <Compile Include="GUI\Rename.cs">
+    <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GUI\Rename.Designer.cs">
-      <DependentUpon>Rename.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\WorkspaceWizard.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\WorkspaceWizard.Designer.cs">
-      <DependentUpon>WorkspaceWizard.cs</DependentUpon>
-    </Compile>
-    <Compile Include="WorkspaceManager.cs" />
-    <None Include="GUI\Event Library\Event Library.cs">
-      <SubType>Form</SubType>
-    </None>
-    <None Include="GUI\Event Library\Event Library.Designer.cs">
-      <DependentUpon>Event Library.cs</DependentUpon>
-    </None>
-    <Compile Include="GUI\MainForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\MainForm.Designer.cs">
+    <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
@@ -138,25 +107,9 @@
     <EmbeddedResource Include="GUI\CodeEditor.resx">
       <DependentUpon>CodeEditor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Event Library\Event Library.resx">
-      <DependentUpon>Event Library.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\MainForm.resx">
+    <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\ParamEditor.resx">
-      <DependentUpon>ParamEditor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\ProjectWizard.resx">
-      <DependentUpon>ProjectWizard.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\Rename.resx">
-      <DependentUpon>Rename.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\WorkspaceWizard.resx">
-      <DependentUpon>WorkspaceWizard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -166,9 +119,6 @@
     <EmbeddedResource Include="System\Windows\Components\ITSCodeBox.resx">
       <DependentUpon>ITSCodeBox.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="Events.cfg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -186,12 +136,16 @@
     <Content Include="COPYING.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="FastColoredTextBox.dll" />
+    <Content Include="lib\FastColoredTextBox.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="LICENSE.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="lib\WeifenLuo.WinFormsUI.Docking.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="Resources\play.png" />
-    <Content Include="s4.ico" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SALT\SALT.csproj">
@@ -201,8 +155,10 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>move $(SolutionDir)FITX\FITC\bin\$(ConfigurationName)\FITC.exe $(TargetDir)lib
+move $(SolutionDir)FITX\FITD\bin\$(ConfigurationName)\FITD.exe $(TargetDir)lib
+move $(TargetDir)SALT.dll $(TargetDir)lib
+del $(TargetDir)*.dll</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
