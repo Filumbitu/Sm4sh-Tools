@@ -177,8 +177,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>move $(SolutionDir)FITX\FITC\bin\$(ConfigurationName)\FITC.exe $(TargetDir)lib
-move $(SolutionDir)FITX\FITD\bin\$(ConfigurationName)\FITD.exe $(TargetDir)lib
+    <PostBuildEvent>copy $(SolutionDir)FITX\FITC\bin\$(ConfigurationName)\FITC.exe $(TargetDir)lib
+copy $(SolutionDir)FITX\FITD\bin\$(ConfigurationName)\FITD.exe $(TargetDir)lib
 move $(TargetDir)SALT.dll $(TargetDir)lib
 del $(TargetDir)*.dll</PostBuildEvent>
   </PropertyGroup>
