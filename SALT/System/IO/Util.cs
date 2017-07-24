@@ -1,6 +1,6 @@
 ﻿namespace System.IO
 {
-    public unsafe static class Util
+    public unsafe static class IOUtils
     {
         //==================================================\\
         // Uses code from PSA (Project Smash Attacks) SSBB  \\

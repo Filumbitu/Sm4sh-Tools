@@ -225,12 +225,12 @@ namespace FITDecompiler
             if (path.EndsWith(".pac"))
             {
                 byte[] filebytes = File.ReadAllBytes(path);
-                int count = (int)Util.GetWord(filebytes, 8, Endianness.Big);
+                int count = (int)IOUtils.GetWord(filebytes, 8, Endianness.Big);
 
                 for (int i = 0; i < count; i++)
                 {
-                    uint off = (uint)Util.GetWord(filebytes, 0x10 + (i * 4), Endianness.Big);
-                    string FileName = Util.GetString(filebytes, off, Endianness.Big);
+                    uint off = (uint)IOUtils.GetWord(filebytes, 0x10 + (i * 4), Endianness.Big);
+                    string FileName = IOUtils.GetString(filebytes, off, Endianness.Big);
                     string AnimName = Regex.Match(FileName, @"(.*)([A-Z])([0-9][0-9])(.*)\.omo").Groups[4].ToString();
                     if (string.IsNullOrEmpty(AnimName))
                         continue;

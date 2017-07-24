@@ -12,7 +12,7 @@ namespace Sm4shCommand
 {
     static class Program
     {
-        public static readonly string Version = "v1.3.0";
+        public static readonly string Version = "v2.0.0";
         public static readonly string AssemblyTitle;
         public static readonly string AssemblyDescription;
         public static readonly string AssemblyCopyright;
@@ -33,7 +33,7 @@ namespace Sm4shCommand
         static void Main(string[] args)
         {
             Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
-            Application.Run(AcmdMain.Instance);
+            Application.Run(MainForm.Instance);
         }
 
         private static void RegisterFileAssociations()

@@ -14,85 +14,38 @@ using WeifenLuo.WinFormsUI.Docking;
 
 namespace Sm4shCommand
 {
-    public partial class AcmdMain : Form
+    public partial class MainForm : Form
     {
-        public static AcmdMain Instance
+        public static MainForm Instance
         {
-            get { return _instance != null ? _instance : (_instance = new AcmdMain()); }
+            get { return _instance != null ? _instance : (_instance = new MainForm()); }
         }
-        private static AcmdMain _instance;
+        private static MainForm _instance;
 
-        public AcmdMain()
+        public MainForm()
         {
             InitializeComponent();
-            this.Text = $"{Program.AssemblyTitle} {Program.Version} - ";
+            this.Text = $"{Program.AssemblyTitle} {Program.Version} BETA - ";
         }
 
         public const string FileFilter =
-                              "All Supported Files (*.bin, *.mscsb)|*.bin;*.mscsb|" +
-                              "ACMD Binary (*.bin)|*.bin|" +
-                              "MotionScript Binary (*.mscsb)|*.mscsb|" +
+                              "All Supported Files (*.acm, *.fitproj, *.wrkspc)|*.bin;*.fitproj;*.wrkspc|" +
+                              "ACMD Script (*.acm)|*.acm|" +
+                              "Fighter Project (*.fitproj)|*.fitproj|" +
+                              "Project Workspace (*.wrkspc)|*.wrkspc|" +
                               "All Files (*.*)|*.*";
 
         private OpenFileDialog ofDlg = new OpenFileDialog() { Filter = FileFilter };
         private SaveFileDialog sfDlg = new SaveFileDialog() { Filter = FileFilter };
         private FolderSelectDialog fsDlg = new FolderSelectDialog();
 
-        public SortedList<string, IScriptCollection> ScriptFiles { get; set; }
-        public ParamFile ParamFile { get; set; }
-        public MTable MotionTable { get; set; }
-        public IDE_MODE IDEMode { get; private set; }
+        internal WorkspaceExplorer Explorer { get; set; }
+        internal WorkspaceManager WorkspaceManager { get; set; }
 
         private void aboutToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
             var abtBox = new AboutBox();
             abtBox.ShowDialog();
-        }
-
-        private unsafe void fOpen_Click(object sender, EventArgs e)
-        {
-            if(ofDlg.ShowDialog() == DialogResult.OK)
-            {
-
-                AddDockedControl(new CodeEditor() { ShowHint = DockState.Document,TabText = "editor" });
-            }
-        }
-        private void fitOpen_Click(object sender, EventArgs e)
-        {
-
-        }
-        private void projOpen_Click(object sender, EventArgs e)
-        {
-
-        }
-        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void ProjectToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void FileTree_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
-        {
-
-        }
-        private void FileTree_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
-        {
-            FileTree.SelectedNode = FileTree.GetNodeAt(e.Location);
-        }
-
-        private void tabControl1_MouseClick(object sender, MouseEventArgs e)
-        {
-
-        }
-        private void parseAnimationsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
         }
 
         public void AddDockedControl(DockContent content)
@@ -106,12 +59,18 @@ namespace Sm4shCommand
                 content.Show(dockPanel1);
         }
 
-        public enum IDE_MODE
+        private void MainForm_Load(object sender, EventArgs e)
         {
-            File,
-            Fighter,
-            Project,
-            NONE
+            Explorer = new WorkspaceExplorer() { ShowHint = DockState.DockRight };
+            AddDockedControl(Explorer);
+            AddDockedControl(new CodeEditor() { ShowHint = DockState.Document ,TabText = "Editor"});
+            WorkspaceManager = new WorkspaceManager(Explorer);
+        }
+
+        private void projectToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            NewProjectDialog dlg = new NewProjectDialog();
+            dlg.ShowDialog();
         }
     }
 }

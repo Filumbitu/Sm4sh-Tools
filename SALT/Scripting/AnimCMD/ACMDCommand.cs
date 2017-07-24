@@ -63,12 +63,12 @@ namespace SALT.Moveset.AnimCMD
         public virtual byte[] GetBytes(Endianness endian)
         {
             byte[] tmp = new byte[this.Size];
-            Util.SetWord(ref tmp, this.Ident, 0, endian);
+            IOUtils.SetWord(ref tmp, this.Ident, 0, endian);
             for (int i = 0; i < this.ParamSpecifiers.Length; i++)
             {
                 if (this.ParamSpecifiers[i] == 0)
                 {
-                    Util.SetWord(ref tmp, Convert.ToInt32(this.Parameters[i]), (i + 1) * 4, endian);
+                    IOUtils.SetWord(ref tmp, Convert.ToInt32(this.Parameters[i]), (i + 1) * 4, endian);
                 }
                 else if (this.ParamSpecifiers[i] == 1)
                 {
@@ -78,11 +78,11 @@ namespace SALT.Moveset.AnimCMD
                     int dec = BitConverter.ToInt32(bytes, 0);
                     string _hexval = dec.ToString("X");
 
-                    Util.SetWord(ref tmp, int.Parse(_hexval, System.Globalization.NumberStyles.HexNumber), (i + 1) * 4, endian);
+                    IOUtils.SetWord(ref tmp, int.Parse(_hexval, System.Globalization.NumberStyles.HexNumber), (i + 1) * 4, endian);
                 }
                 else if (this.ParamSpecifiers[i] == 2)
                 {
-                    Util.SetWord(ref tmp, (long)Convert.ToDecimal(this.Parameters[i]), (i + 1) * 4, endian);
+                    IOUtils.SetWord(ref tmp, (long)Convert.ToDecimal(this.Parameters[i]), (i + 1) * 4, endian);
                 }
             }
 

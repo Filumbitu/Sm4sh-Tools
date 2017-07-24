@@ -31,13 +31,13 @@ namespace SALT.Moveset.AnimCMD
                 this.Endian = Endianness.Big;
             }
 
-            this.ActionCount = Util.GetWordUnsafe(source.Address + 0x08, this.Endian);
-            this.CommandCount = Util.GetWordUnsafe(source.Address + 0x0C, this.Endian);
+            this.ActionCount = IOUtils.GetWordUnsafe(source.Address + 0x08, this.Endian);
+            this.CommandCount = IOUtils.GetWordUnsafe(source.Address + 0x0C, this.Endian);
 
             for (int i = 0; i < this.ActionCount; i++)
             {
-                uint _crc = (uint)Util.GetWordUnsafe(this._workingSource.Address + 0x10 + (i * 8), this.Endian);
-                int _offset = Util.GetWordUnsafe((this._workingSource.Address + 0x10 + (i * 8)) + 0x04, this.Endian);
+                uint _crc = (uint)IOUtils.GetWordUnsafe(this._workingSource.Address + 0x10 + (i * 8), this.Endian);
+                int _offset = IOUtils.GetWordUnsafe((this._workingSource.Address + 0x10 + (i * 8)) + 0x04, this.Endian);
 
                 this.Scripts.Add(_crc, this.ParseEventList(_crc, _offset));
             }
@@ -185,26 +185,26 @@ namespace SALT.Moveset.AnimCMD
         private void OnRebuild(VoidPtr address, int length)
         {
             VoidPtr addr = address; // Base address. (0x00)
-            Util.SetWordUnsafe(address, 0x444D4341, Endianness.Little); // ACMD
+            IOUtils.SetWordUnsafe(address, 0x444D4341, Endianness.Little); // ACMD
 
             //==========================================================================//
             //                      Rebuilding Header and offsets                       //
             //==========================================================================//
 
-            Util.SetWordUnsafe(address + 0x04, 2, this.Endian); // Version (2)
-            Util.SetWordUnsafe(address + 0x08, this.Scripts.Count, this.Endian);
+            IOUtils.SetWordUnsafe(address + 0x04, 2, this.Endian); // Version (2)
+            IOUtils.SetWordUnsafe(address + 0x08, this.Scripts.Count, this.Endian);
 
             int count = this.Scripts.Values.Sum(e => e.Count());
 
-            Util.SetWordUnsafe(address + 0x0C, count, this.Endian);
+            IOUtils.SetWordUnsafe(address + 0x0C, count, this.Endian);
             addr += 0x10;
 
             //===============Write Event List offsets and CRC's=================//
             for (int i = 0, prev = 0; i < this.Scripts.Count; i++)
             {
                 int dataOffset = 0x10 + (this.Scripts.Count * 8) + prev;
-                Util.SetWordUnsafe(addr, (int)this.Scripts.Keys[i], this.Endian);
-                Util.SetWordUnsafe(addr + 4, dataOffset, this.Endian);
+                IOUtils.SetWordUnsafe(addr, (int)this.Scripts.Keys[i], this.Endian);
+                IOUtils.SetWordUnsafe(addr + 4, dataOffset, this.Endian);
                 prev += this.Scripts.Values[i].Size;
                 addr += 8;
             }
@@ -225,10 +225,10 @@ namespace SALT.Moveset.AnimCMD
             VoidPtr addr = (this._workingSource.Address + offset);
 
             // Loop through Event List.
-            while (Util.GetWordUnsafe(addr, this.Endian) != 0x5766F889)
+            while (IOUtils.GetWordUnsafe(addr, this.Endian) != 0x5766F889)
             {
                 // Try to get command definition
-                uint ident = (uint)Util.GetWordUnsafe(addr, this.Endian);
+                uint ident = (uint)IOUtils.GetWordUnsafe(addr, this.Endian);
                 // Get command parameters and add the command to the event list.
                 c = new ACMDCommand(ident);
                 for (int i = 0; i < c.ParamSpecifiers.Length; i++)
@@ -236,13 +236,13 @@ namespace SALT.Moveset.AnimCMD
                     switch (c.ParamSpecifiers[i])
                     {
                         case 0:
-                            c.Parameters.Add(Util.GetWordUnsafe(0x04 + (addr + (i * 4)), this.Endian));
+                            c.Parameters.Add(IOUtils.GetWordUnsafe(0x04 + (addr + (i * 4)), this.Endian));
                             break;
                         case 1:
-                            c.Parameters.Add(Util.GetFloatUnsafe(0x04 + (addr + (i * 4)), this.Endian));
+                            c.Parameters.Add(IOUtils.GetFloatUnsafe(0x04 + (addr + (i * 4)), this.Endian));
                             break;
                         case 2:
-                            c.Parameters.Add((decimal)Util.GetWordUnsafe(0x04 + (addr + (i * 4)), this.Endian));
+                            c.Parameters.Add((decimal)IOUtils.GetWordUnsafe(0x04 + (addr + (i * 4)), this.Endian));
                             break;
                         default:
                             goto case 0;
@@ -254,7 +254,7 @@ namespace SALT.Moveset.AnimCMD
             }
 
             // If we hit a script_end command, add it to the the Event List and terminate looping.
-            if (Util.GetWordUnsafe(addr, this.Endian) == 0x5766F889)
+            if (IOUtils.GetWordUnsafe(addr, this.Endian) == 0x5766F889)
             {
                 c = new ACMDCommand(0x5766F889);
                 _list.Add(c);
