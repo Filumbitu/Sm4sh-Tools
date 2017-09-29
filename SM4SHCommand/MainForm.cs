@@ -48,8 +48,9 @@ namespace Sm4shCommand
             abtBox.ShowDialog();
         }
 
-        public void AddDockedControl(DockContent content)
+        public void AddDockedControl(DockContent content, DockState dock)
         {
+            content.ShowHint = dock;
             if (dockPanel1.DocumentStyle == DocumentStyle.SystemMdi)
             {
                 content.MdiParent = this;
@@ -61,9 +62,8 @@ namespace Sm4shCommand
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            Explorer = new WorkspaceExplorer() { ShowHint = DockState.DockRight };
-            AddDockedControl(Explorer);
-            AddDockedControl(new CodeEditor() { ShowHint = DockState.Document ,TabText = "Editor"});
+            AddDockedControl(new WorkspaceExplorer(), DockState.DockRight);
+            AddDockedControl(new CodeEditor() { TabText = "Editor" }, DockState.Document);
             WorkspaceManager = new WorkspaceManager(Explorer);
         }
 
