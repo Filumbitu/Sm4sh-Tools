@@ -66,6 +66,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EventConfig.cs" />
+    <Compile Include="GLOBALS.cs" />
     <Compile Include="GUI\AboutBox.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -92,6 +94,7 @@
     <Compile Include="GUI\WorkspaceExplorer.Designer.cs">
       <DependentUpon>WorkspaceExplorer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Project.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -156,15 +159,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="COPYING.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="lib\FastColoredTextBox.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="LICENSE.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="lib\WeifenLuo.WinFormsUI.Docking.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="LICENSE.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Resources\play.png" />
@@ -175,6 +178,7 @@
       <Name>SALT</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy $(SolutionDir)FITX\FITC\bin\$(ConfigurationName)\FITC.exe $(TargetDir)lib

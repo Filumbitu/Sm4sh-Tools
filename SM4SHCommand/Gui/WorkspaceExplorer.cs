@@ -21,5 +21,17 @@ namespace Sm4shCommand.GUI
         {
             treeView1.SelectedNode = treeView1.GetNodeAt(e.Location);
         }
+
+        private void treeView1_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
+        {
+            if (e.Node.Text == e.Label || e.Label == null)
+            {
+                e.CancelEdit = true;
+            }
+            else
+            {
+                ((Nodes.ProjectExplorerNode)e.Node).EndRename(e.Label);
+            }
+        }
     }
 }

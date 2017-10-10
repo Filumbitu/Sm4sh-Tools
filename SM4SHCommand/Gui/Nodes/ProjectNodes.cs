@@ -30,38 +30,41 @@ namespace Sm4shCommand.GUI.Nodes
                 if (this.Tag is DirectoryInfo)
                 {
                     string name = ((DirectoryInfo)this.Tag).FullName;
-                    Directory.Delete(name, true);
-                    ProjectNode.Project.RemoveFile(name);
+                    ProjectNode.Project.RemoveFolder(this.FullPath.Replace(ProjectNode.Text, ""));
+                    ((DirectoryInfo)this.Tag).Delete(true);
                 }
                 else if (this is ProjectNode)
                 {
                     string name = ((FileInfo)this.Tag).FullName;
-                    File.Delete(name);
                     var n = this as ProjectNode;
                     MainForm.Instance.WorkspaceManager.RemoveProject(n.ProjectName);
+                    ((FileInfo)this.Tag).Delete();
                 }
                 else if (this.Tag is FileInfo)
                 {
                     string name = ((FileInfo)this.Tag).FullName;
-                    File.Delete(name);
                     ProjectNode.Project.RemoveFile(name);
+                    ((FileInfo)this.Tag).Delete();
                 }
 
                 this.Remove();
             }
         }
-        public virtual void Rename()
+
+        public virtual void BeginRename()
         {
             this.EnsureVisible();
             this.BeginEdit();
         }
-        private static void DeleteAction(object sender, EventArgs e)
+        public virtual void EndRename(string newname) { }
+
+        protected static void DeleteAction(object sender, EventArgs e)
         {
             GetInstance<ProjectExplorerNode>().DeleteFileOrFolder();
         }
-        private static void RenameAction(object sender, EventArgs e)
+        protected static void RenameAction(object sender, EventArgs e)
         {
-            GetInstance<ProjectExplorerNode>().Rename();
+            GetInstance<ProjectExplorerNode>().BeginRename();
         }
         protected static T GetInstance<T>() where T : TreeNode
         {
@@ -72,7 +75,6 @@ namespace Sm4shCommand.GUI.Nodes
         {
             get
             {
-
                 TreeNode node = this;
                 while (node != null)
                 {
@@ -83,7 +85,13 @@ namespace Sm4shCommand.GUI.Nodes
                 }
                 return (ProjectNode)node;
             }
-
+        }
+        public string ProjectRelativePath
+        {
+            get
+            {
+                return null;
+            }
         }
     }
 
@@ -91,12 +99,15 @@ namespace Sm4shCommand.GUI.Nodes
     {
         static ProjectFolderNode()
         {
+            _menu.Items.Clear();
             _menu.Items.Add(new ToolStripMenuItem("Add", null,
                                                  new ToolStripMenuItem("New Item", null, NewFileAction),
                                                  new ToolStripMenuItem("New Folder", null, AddFolderAction),
                                                  new ToolStripMenuItem("Existing Item", null, ImportFileAction))
 
                            );
+            _menu.Items.Add("Rename", null, RenameAction);
+            _menu.Items.Add("Delete", null, DeleteAction);
         }
         private static void NewFileAction(object sender, EventArgs e)
         {
@@ -111,13 +122,31 @@ namespace Sm4shCommand.GUI.Nodes
             GetInstance<ProjectFolderNode>().AddFolder();
         }
 
+        public override void EndRename(string newname)
+        {
+
+            DirectoryInfo info = (DirectoryInfo)this.Tag;
+
+            // remove project node from path
+            string search = this.FullPath.ReplaceFirstOccurance(ProjectNode.Text, "");
+
+            // Update text field for node.FullPath
+            string oldname = this.Text;
+            this.Text = newname;
+
+            string replace = this.FullPath.ReplaceFirstOccurance(ProjectNode.Text, "");
+
+            // move directory and update project file
+            info.MoveTo(info.FullName.ReplaceFirstOccurance(search, replace));
+            this.ProjectNode.Project.RenameDirectory(info.FullName, search, replace);
+        }
+
         public void NewFile()
         {
             throw new NotImplementedException();
         }
         public void AddFolder()
         {
-
             int i = 0;
             foreach (TreeNode n in this.Nodes)
             {
@@ -168,6 +197,15 @@ namespace Sm4shCommand.GUI.Nodes
         public ProjectFileNode()
         {
             this.ImageIndex = this.SelectedImageIndex = 1;
+        }
+
+        public override void EndRename(string newname)
+        {
+            FileInfo info = (FileInfo)this.Tag;
+            string s = this.FullPath;
+            s = s.Remove(0, s.IndexOf(Path.DirectorySeparatorChar));
+            int indexOfRename = s.IndexOf(this.Text);
+            this.ProjectNode.Project.RenameFile(info.FullName, this.Text, newname);
         }
     }
 

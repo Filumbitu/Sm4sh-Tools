@@ -62,7 +62,8 @@ namespace Sm4shCommand
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            AddDockedControl(new WorkspaceExplorer(), DockState.DockRight);
+            Explorer = new WorkspaceExplorer();
+            AddDockedControl(Explorer, DockState.DockRight);
             AddDockedControl(new CodeEditor() { TabText = "Editor" }, DockState.Document);
             WorkspaceManager = new WorkspaceManager(Explorer);
         }
@@ -71,6 +72,14 @@ namespace Sm4shCommand
         {
             NewProjectDialog dlg = new NewProjectDialog();
             dlg.ShowDialog();
+        }
+
+        private void fOpen_Click(object sender, EventArgs e)
+        {
+            if (ofDlg.ShowDialog() == DialogResult.OK)
+            {
+                WorkspaceManager.OpenProject(ofDlg.FileName);
+            }
         }
     }
 }

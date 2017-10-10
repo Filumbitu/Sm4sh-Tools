@@ -29,48 +29,57 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem(new string[] {
-            "New Empty Project"}, 1, System.Drawing.Color.Empty, System.Drawing.Color.Empty, new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))));
-            System.Windows.Forms.ListViewItem listViewItem5 = new System.Windows.Forms.ListViewItem(new string[] {
-            "Decompile New Project"}, 2, System.Drawing.Color.Empty, System.Drawing.Color.Empty, new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))));
-            System.Windows.Forms.ListViewItem listViewItem6 = new System.Windows.Forms.ListViewItem(new string[] {
-            "Project From Existing Files"}, 0, System.Drawing.Color.Empty, System.Drawing.Color.Empty, new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))));
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(NewProjectDialog));
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.txtLocation = new System.Windows.Forms.TextBox();
+            this.txtName = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.btnBrowse = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnCancel = new System.Windows.Forms.Button();
+            this.chkNewDir = new System.Windows.Forms.CheckBox();
+            this.chkCurWorkspace = new System.Windows.Forms.CheckBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.txtWorkspace = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
-            this.listView1 = new System.Windows.Forms.ListView();
-            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+            this.lstProjTemplate = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+            this.btnOkay = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
-            // textBox1
+            // txtLocation
             // 
-            this.textBox1.Location = new System.Drawing.Point(79, 51);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(514, 20);
-            this.textBox1.TabIndex = 0;
+            this.txtLocation.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtLocation.Location = new System.Drawing.Point(79, 75);
+            this.txtLocation.Name = "txtLocation";
+            this.txtLocation.Size = new System.Drawing.Size(433, 20);
+            this.txtLocation.TabIndex = 2;
             // 
-            // textBox2
+            // txtName
             // 
-            this.textBox2.Location = new System.Drawing.Point(79, 19);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(514, 20);
-            this.textBox2.TabIndex = 0;
+            this.txtName.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtName.Location = new System.Drawing.Point(79, 19);
+            this.txtName.Name = "txtName";
+            this.txtName.Size = new System.Drawing.Size(433, 20);
+            this.txtName.TabIndex = 0;
+            this.txtName.TextChanged += new System.EventHandler(this.txtName_TextChanged);
             // 
             // label1
             // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(16, 23);
+            this.label1.Location = new System.Drawing.Point(29, 22);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(38, 13);
             this.label1.TabIndex = 1;
@@ -78,95 +87,166 @@
             // 
             // label2
             // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 55);
+            this.label2.Location = new System.Drawing.Point(16, 78);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(51, 13);
             this.label2.TabIndex = 1;
             this.label2.Text = "Location:";
             this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
-            // button1
+            // btnBrowse
             // 
-            this.button1.Location = new System.Drawing.Point(599, 18);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(27, 23);
-            this.button1.TabIndex = 2;
-            this.button1.Text = "...";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(599, 50);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(27, 23);
-            this.button2.TabIndex = 2;
-            this.button2.Text = "...";
-            this.button2.UseVisualStyleBackColor = true;
+            this.btnBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnBrowse.Location = new System.Drawing.Point(518, 74);
+            this.btnBrowse.Name = "btnBrowse";
+            this.btnBrowse.Size = new System.Drawing.Size(27, 23);
+            this.btnBrowse.TabIndex = 3;
+            this.btnBrowse.Text = "...";
+            this.btnBrowse.UseVisualStyleBackColor = true;
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.textBox2);
-            this.groupBox1.Controls.Add(this.button2);
-            this.groupBox1.Controls.Add(this.textBox1);
-            this.groupBox1.Controls.Add(this.button1);
+            this.groupBox1.Controls.Add(this.btnCancel);
+            this.groupBox1.Controls.Add(this.chkNewDir);
+            this.groupBox1.Controls.Add(this.chkCurWorkspace);
+            this.groupBox1.Controls.Add(this.label5);
+            this.groupBox1.Controls.Add(this.label3);
+            this.groupBox1.Controls.Add(this.txtWorkspace);
+            this.groupBox1.Controls.Add(this.txtName);
+            this.groupBox1.Controls.Add(this.btnBrowse);
+            this.groupBox1.Controls.Add(this.label4);
+            this.groupBox1.Controls.Add(this.txtLocation);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Location = new System.Drawing.Point(12, 201);
+            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.groupBox1.Location = new System.Drawing.Point(0, 234);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(632, 85);
+            this.groupBox1.Size = new System.Drawing.Size(566, 148);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             // 
+            // btnCancel
+            // 
+            this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCancel.Location = new System.Drawing.Point(483, 121);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnCancel.TabIndex = 7;
+            this.btnCancel.Text = "Cancel";
+            this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.button4_Click);
+            // 
+            // chkNewDir
+            // 
+            this.chkNewDir.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.chkNewDir.AutoSize = true;
+            this.chkNewDir.Checked = true;
+            this.chkNewDir.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkNewDir.Location = new System.Drawing.Point(239, 109);
+            this.chkNewDir.Name = "chkNewDir";
+            this.chkNewDir.Size = new System.Drawing.Size(15, 14);
+            this.chkNewDir.TabIndex = 4;
+            this.chkNewDir.UseVisualStyleBackColor = true;
+            // 
+            // chkCurWorkspace
+            // 
+            this.chkCurWorkspace.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.chkCurWorkspace.AutoSize = true;
+            this.chkCurWorkspace.Location = new System.Drawing.Point(239, 129);
+            this.chkCurWorkspace.Name = "chkCurWorkspace";
+            this.chkCurWorkspace.Size = new System.Drawing.Size(15, 14);
+            this.chkCurWorkspace.TabIndex = 5;
+            this.chkCurWorkspace.UseVisualStyleBackColor = true;
+            // 
+            // label5
+            // 
+            this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(76, 110);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(157, 13);
+            this.label5.TabIndex = 3;
+            this.label5.Text = "Create directory for Workspace:";
+            // 
+            // label3
+            // 
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(98, 128);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(135, 13);
+            this.label3.TabIndex = 3;
+            this.label3.Text = "Add to current Workspace:";
+            // 
+            // txtWorkspace
+            // 
+            this.txtWorkspace.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtWorkspace.Location = new System.Drawing.Point(79, 47);
+            this.txtWorkspace.Name = "txtWorkspace";
+            this.txtWorkspace.Size = new System.Drawing.Size(433, 20);
+            this.txtWorkspace.TabIndex = 1;
+            // 
+            // label4
+            // 
+            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(2, 50);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(65, 13);
+            this.label4.TabIndex = 1;
+            this.label4.Text = "Workspace:";
+            // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.listView1);
-            this.groupBox2.Location = new System.Drawing.Point(12, 12);
+            this.groupBox2.Controls.Add(this.lstProjTemplate);
+            this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBox2.Location = new System.Drawing.Point(0, 0);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(632, 183);
+            this.groupBox2.Size = new System.Drawing.Size(566, 234);
             this.groupBox2.TabIndex = 4;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Project Types";
             // 
-            // button3
+            // lstProjTemplate
             // 
-            this.button3.Location = new System.Drawing.Point(488, 292);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
-            this.button3.TabIndex = 5;
-            this.button3.Text = "Okay";
-            this.button3.UseVisualStyleBackColor = true;
-            // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(569, 292);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(75, 23);
-            this.button4.TabIndex = 5;
-            this.button4.Text = "Cancel";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
-            // 
-            // listView1
-            // 
-            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.lstProjTemplate.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1});
-            this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listView1.FullRowSelect = true;
-            this.listView1.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem4,
-            listViewItem5,
-            listViewItem6});
-            this.listView1.LabelWrap = false;
-            this.listView1.LargeImageList = this.imageList1;
-            this.listView1.Location = new System.Drawing.Point(3, 16);
-            this.listView1.MultiSelect = false;
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(626, 164);
-            this.listView1.SmallImageList = this.imageList1;
-            this.listView1.TabIndex = 0;
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.Details;
+            this.lstProjTemplate.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lstProjTemplate.FullRowSelect = true;
+            this.lstProjTemplate.HideSelection = false;
+            this.lstProjTemplate.LabelWrap = false;
+            this.lstProjTemplate.LargeImageList = this.imageList1;
+            this.lstProjTemplate.Location = new System.Drawing.Point(3, 16);
+            this.lstProjTemplate.MultiSelect = false;
+            this.lstProjTemplate.Name = "lstProjTemplate";
+            this.lstProjTemplate.Size = new System.Drawing.Size(560, 215);
+            this.lstProjTemplate.SmallImageList = this.imageList1;
+            this.lstProjTemplate.TabIndex = 0;
+            this.lstProjTemplate.UseCompatibleStateImageBehavior = false;
+            this.lstProjTemplate.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = "Name";
+            this.columnHeader1.Width = 597;
             // 
             // imageList1
             // 
@@ -176,21 +256,29 @@
             this.imageList1.Images.SetKeyName(1, "Untitled-2.png");
             this.imageList1.Images.SetKeyName(2, "Untitled-3.png");
             // 
-            // columnHeader1
+            // btnOkay
             // 
-            this.columnHeader1.Text = "Name";
-            this.columnHeader1.Width = 597;
+            this.btnOkay.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnOkay.Location = new System.Drawing.Point(402, 355);
+            this.btnOkay.Name = "btnOkay";
+            this.btnOkay.Size = new System.Drawing.Size(75, 23);
+            this.btnOkay.TabIndex = 6;
+            this.btnOkay.Text = "Okay";
+            this.btnOkay.UseVisualStyleBackColor = true;
+            this.btnOkay.Click += new System.EventHandler(this.btnOkay_Click);
             // 
             // NewProjectDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(656, 330);
-            this.Controls.Add(this.button4);
-            this.Controls.Add(this.button3);
+            this.ClientSize = new System.Drawing.Size(566, 382);
+            this.Controls.Add(this.btnOkay);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(574, 409);
             this.Name = "NewProjectDialog";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
@@ -205,18 +293,23 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox txtLocation;
+        private System.Windows.Forms.TextBox txtName;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button btnBrowse;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.ListView listView1;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.ListView lstProjTemplate;
+        private System.Windows.Forms.Button btnOkay;
+        private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ImageList imageList1;
+        private System.Windows.Forms.CheckBox chkNewDir;
+        private System.Windows.Forms.CheckBox chkCurWorkspace;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox txtWorkspace;
+        private System.Windows.Forms.Label label4;
     }
 }

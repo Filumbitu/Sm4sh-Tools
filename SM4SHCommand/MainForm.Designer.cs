@@ -62,19 +62,19 @@
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripComboBox1 = new System.Windows.Forms.ToolStripComboBox();
-            this.toolStripComboBox2 = new System.Windows.Forms.ToolStripComboBox();
-            this.splitter2 = new System.Windows.Forms.Splitter();
-            this.dockPanel1 = new WeifenLuo.WinFormsUI.Docking.DockPanel();
             this.newToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.openToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.saveToolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.cutToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.copyToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.pasteToolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripComboBox1 = new System.Windows.Forms.ToolStripComboBox();
+            this.toolStripComboBox2 = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.splitter2 = new System.Windows.Forms.Splitter();
+            this.dockPanel1 = new WeifenLuo.WinFormsUI.Docking.DockPanel();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -179,6 +179,7 @@
             this.fOpen.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
             this.fOpen.Size = new System.Drawing.Size(258, 22);
             this.fOpen.Text = "File...";
+            this.fOpen.Click += new System.EventHandler(this.fOpen_Click);
             // 
             // toolStripSeparator1
             // 
@@ -353,52 +354,6 @@
             this.toolStrip1.TabIndex = 14;
             this.toolStrip1.Text = "toolStrip1";
             // 
-            // toolStripSeparator
-            // 
-            this.toolStripSeparator.Name = "toolStripSeparator";
-            this.toolStripSeparator.Size = new System.Drawing.Size(6, 25);
-            // 
-            // toolStripSeparator7
-            // 
-            this.toolStripSeparator7.Name = "toolStripSeparator7";
-            this.toolStripSeparator7.Size = new System.Drawing.Size(6, 25);
-            // 
-            // toolStripComboBox1
-            // 
-            this.toolStripComboBox1.AutoCompleteCustomSource.AddRange(new string[] {
-            "Wii U",
-            "3DS"});
-            this.toolStripComboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.toolStripComboBox1.Items.AddRange(new object[] {
-            "Wii U",
-            "3DS"});
-            this.toolStripComboBox1.Name = "toolStripComboBox1";
-            this.toolStripComboBox1.Size = new System.Drawing.Size(121, 25);
-            // 
-            // toolStripComboBox2
-            // 
-            this.toolStripComboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.toolStripComboBox2.Name = "toolStripComboBox2";
-            this.toolStripComboBox2.Size = new System.Drawing.Size(121, 25);
-            // 
-            // splitter2
-            // 
-            this.splitter2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.splitter2.Location = new System.Drawing.Point(0, 458);
-            this.splitter2.Name = "splitter2";
-            this.splitter2.Size = new System.Drawing.Size(841, 3);
-            this.splitter2.TabIndex = 15;
-            this.splitter2.TabStop = false;
-            // 
-            // dockPanel1
-            // 
-            this.dockPanel1.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.dockPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dockPanel1.Location = new System.Drawing.Point(0, 49);
-            this.dockPanel1.Name = "dockPanel1";
-            this.dockPanel1.Size = new System.Drawing.Size(841, 409);
-            this.dockPanel1.TabIndex = 16;
-            // 
             // newToolStripButton
             // 
             this.newToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -425,6 +380,11 @@
             this.saveToolStripButton.Name = "saveToolStripButton";
             this.saveToolStripButton.Size = new System.Drawing.Size(23, 22);
             this.saveToolStripButton.Text = "&Save";
+            // 
+            // toolStripSeparator
+            // 
+            this.toolStripSeparator.Name = "toolStripSeparator";
+            this.toolStripSeparator.Size = new System.Drawing.Size(6, 25);
             // 
             // cutToolStripButton
             // 
@@ -453,6 +413,29 @@
             this.pasteToolStripButton.Size = new System.Drawing.Size(23, 22);
             this.pasteToolStripButton.Text = "&Paste";
             // 
+            // toolStripSeparator7
+            // 
+            this.toolStripSeparator7.Name = "toolStripSeparator7";
+            this.toolStripSeparator7.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripComboBox1
+            // 
+            this.toolStripComboBox1.AutoCompleteCustomSource.AddRange(new string[] {
+            "Wii U",
+            "3DS"});
+            this.toolStripComboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.toolStripComboBox1.Items.AddRange(new object[] {
+            "Wii U",
+            "3DS"});
+            this.toolStripComboBox1.Name = "toolStripComboBox1";
+            this.toolStripComboBox1.Size = new System.Drawing.Size(121, 25);
+            // 
+            // toolStripComboBox2
+            // 
+            this.toolStripComboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.toolStripComboBox2.Name = "toolStripComboBox2";
+            this.toolStripComboBox2.Size = new System.Drawing.Size(121, 25);
+            // 
             // toolStripButton1
             // 
             this.toolStripButton1.Image = global::Sm4shCommand.Properties.Resources.play;
@@ -460,6 +443,24 @@
             this.toolStripButton1.Name = "toolStripButton1";
             this.toolStripButton1.Size = new System.Drawing.Size(54, 22);
             this.toolStripButton1.Text = "Build";
+            // 
+            // splitter2
+            // 
+            this.splitter2.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.splitter2.Location = new System.Drawing.Point(0, 458);
+            this.splitter2.Name = "splitter2";
+            this.splitter2.Size = new System.Drawing.Size(841, 3);
+            this.splitter2.TabIndex = 15;
+            this.splitter2.TabStop = false;
+            // 
+            // dockPanel1
+            // 
+            this.dockPanel1.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.dockPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dockPanel1.Location = new System.Drawing.Point(0, 49);
+            this.dockPanel1.Name = "dockPanel1";
+            this.dockPanel1.Size = new System.Drawing.Size(841, 409);
+            this.dockPanel1.TabIndex = 16;
             // 
             // MainForm
             // 
