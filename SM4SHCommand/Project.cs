@@ -107,16 +107,16 @@ namespace Sm4shCommand
             {
                 if (entry.RelativePath.Contains(oldname) && entry.RealPath.Contains(oldname))
                 {
-                    entry.RelativePath = entry.RelativePath.Replace(oldname, newname);
-                    entry.RealPath = entry.RealPath.Replace(oldname, newname);
+                    entry.RelativePath = entry.RelativePath.ReplaceFirstOccurance(oldname, newname);
+                    entry.RealPath = entry.RealPath.ReplaceFirstOccurance(oldname, newname);
                 }
             }
             foreach (var entry in IncludedFolders)
             {
                 if (entry.RelativePath.Contains(oldname) && entry.RealPath.Contains(oldname))
                 {
-                    entry.RelativePath = entry.RelativePath.Replace(oldname, newname);
-                    entry.RealPath = entry.RealPath.Replace(oldname, newname);
+                    entry.RelativePath = entry.RelativePath.ReplaceFirstOccurance(oldname, newname);
+                    entry.RealPath = entry.RealPath.ReplaceFirstOccurance(oldname, newname);
                 }
             }
             SaveProject();
