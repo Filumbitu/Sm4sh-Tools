@@ -101,22 +101,36 @@ namespace Sm4shCommand
             }
             SaveProject();
         }
-        public void RenameDirectory(string directory, string oldname, string newname)
+        public void RenameDirectory(string directory, int depth, string oldname, string newname)
         {
             foreach (var entry in IncludedFiles)
             {
-                if (entry.RelativePath.Contains(oldname) && entry.RealPath.Contains(oldname))
+                // split the entry's path so we can index
+                // into the correct node and rename it
+                string[] indexedPath = entry.RelativePath.Split(Path.DirectorySeparatorChar);
+                if (depth >= indexedPath.Length)
+                    continue;
+
+                if (indexedPath[depth] == oldname)
                 {
-                    entry.RelativePath = entry.RelativePath.ReplaceFirstOccurance(oldname, newname);
-                    entry.RealPath = entry.RealPath.ReplaceFirstOccurance(oldname, newname);
+                    indexedPath[depth] = newname;
+                    entry.RelativePath = Path.DirectorySeparatorChar + string.Join(Path.DirectorySeparatorChar.ToString(), indexedPath);
+                    entry.RealPath = Path.Combine(this.ProjDirectory, string.Join(Path.DirectorySeparatorChar.ToString(), indexedPath));
                 }
             }
             foreach (var entry in IncludedFolders)
             {
-                if (entry.RelativePath.Contains(oldname) && entry.RealPath.Contains(oldname))
+                // split the entry's path so we can index
+                // into the correct node and rename it
+                string[] indexedPath = entry.RelativePath.Split(Path.DirectorySeparatorChar).SkipWhile(x => string.IsNullOrEmpty(x)).ToArray();
+                if (depth >= indexedPath.Length)
+                    continue;
+
+                if (indexedPath[depth] == oldname)
                 {
-                    entry.RelativePath = entry.RelativePath.ReplaceFirstOccurance(oldname, newname);
-                    entry.RealPath = entry.RealPath.ReplaceFirstOccurance(oldname, newname);
+                    indexedPath[depth] = newname;
+                    entry.RelativePath = Path.DirectorySeparatorChar + string.Join(Path.DirectorySeparatorChar.ToString(), indexedPath);
+                    entry.RealPath = Path.Combine(this.ProjDirectory, string.Join(Path.DirectorySeparatorChar.ToString(), indexedPath));
                 }
             }
             SaveProject();
@@ -215,9 +229,12 @@ namespace Sm4shCommand
                 writer.WriteAttributeString("Include", item.RelativePath);
                 writer.WriteEndElement();
             }
-            writer.WriteEndElement();
+            // Dont need to write new start and 
+            // end element unless we structurally
+            // seperate included files from folders
+            //writer.WriteEndElement();
 
-            writer.WriteStartElement("FileGroup");
+            //writer.WriteStartElement("FileGroup");
             foreach (var item in IncludedFiles)
             {
                 writer.WriteStartElement("Content");
@@ -226,7 +243,6 @@ namespace Sm4shCommand
             }
             writer.WriteEndElement();
 
-            writer.WriteEndElement();
             writer.WriteEndDocument();
             writer.Close();
             var doc = new XmlDocument();

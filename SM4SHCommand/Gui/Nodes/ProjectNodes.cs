@@ -134,11 +134,17 @@ namespace Sm4shCommand.GUI.Nodes
             string oldname = this.Text;
             this.Text = newname;
 
-            string replace = this.FullPath.ReplaceFirstOccurance(ProjectNode.Text, "");
+            // split original path and update the occurance
+            // of the node to be renamed
+            var indexedPath = search.Split(Path.DirectorySeparatorChar).SkipWhile(x => string.IsNullOrEmpty(x)).ToArray();
 
-            // move directory and update project file
-            info.MoveTo(info.FullName.ReplaceFirstOccurance(search, replace));
-            this.ProjectNode.Project.RenameDirectory(info.FullName, search, replace);
+            int count = this.FullPath.Count(x => x == Path.DirectorySeparatorChar) - 1;
+            indexedPath[count] = newname;
+
+            // use new path to update project references and
+            // move the file or directory
+            info.MoveTo(Path.Combine(ProjectNode.Project.ProjDirectory, string.Join(Path.DirectorySeparatorChar.ToString(), indexedPath)));
+            this.ProjectNode.Project.RenameDirectory(info.FullName, count, oldname, newname);
         }
 
         public void NewFile()
