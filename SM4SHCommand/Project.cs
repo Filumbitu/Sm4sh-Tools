@@ -107,7 +107,7 @@ namespace Sm4shCommand
             {
                 // split the entry's path so we can index
                 // into the correct node and rename it
-                string[] indexedPath = entry.RelativePath.Split(Path.DirectorySeparatorChar);
+                string[] indexedPath = entry.RelativePath.Split(Path.DirectorySeparatorChar).SkipWhile(x => string.IsNullOrEmpty(x)).ToArray();
                 if (depth >= indexedPath.Length)
                     continue;
 

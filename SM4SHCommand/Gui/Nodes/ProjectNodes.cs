@@ -124,7 +124,6 @@ namespace Sm4shCommand.GUI.Nodes
 
         public override void EndRename(string newname)
         {
-
             DirectoryInfo info = (DirectoryInfo)this.Tag;
 
             // remove project node from path
@@ -187,8 +186,30 @@ namespace Sm4shCommand.GUI.Nodes
             {
                 if (ofd.ShowDialog() == DialogResult.OK)
                 {
-                    ProjectNode.Project.AddFile(ofd.FileName);
-                    Nodes.Add(new ProjectFileNode() { Tag = new FileInfo(ofd.FileName) });
+                    foreach(TreeNode n in this.Nodes)
+                    {
+                        if (n.Text == ofd.SafeFileName)
+                        {
+                            MessageBox.Show("A file with this name already exists!");
+                            return;
+                        }
+                    }
+
+                    string path = "";
+                    if (this is ProjectNode)
+                        path = Path.Combine(Path.GetDirectoryName((((FileInfo)this.Tag).FullName)), ofd.SafeFileName);
+                    else
+                        path = Path.Combine((((DirectoryInfo)this.Tag).FullName), ofd.SafeFileName);
+
+                    ProjectNode.Project.AddFile(path);
+                    File.Copy(ofd.FileName, path);
+                    var node = new ProjectFileNode()
+                    {
+                        Tag = new FileInfo(path)
+                    };
+                    node.Text = ofd.SafeFileName;
+                    Nodes.Add(node);
+                    node.EnsureVisible();
                 }
             }
         }

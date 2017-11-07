@@ -109,8 +109,9 @@ namespace Sm4shCommand
                 var projNode = new ProjectNode(p);
                 projNode.Tag = fileinfo;
 
-                GetDirectories(new DirectoryInfo(p.ProjDirectory).GetDirectories(), projNode, p);
                 GetFiles(new DirectoryInfo(p.ProjDirectory), projNode, p);
+                GetDirectories(new DirectoryInfo(p.ProjDirectory).GetDirectories(), projNode, p);
+
 
                 if (workspaceNode != null)
                     workspaceNode.Nodes.Add(projNode);
@@ -129,15 +130,22 @@ namespace Sm4shCommand
             DirectoryInfo[] subSubDirs;
             foreach (DirectoryInfo subDir in subDirs)
             {
-                aNode = new ProjectFolderNode() { Text = subDir.Name };
-                aNode.Tag = subDir;
-                subSubDirs = subDir.GetDirectories();
-                if (subSubDirs.Length != 0)
+                foreach (ProjectItem i in p.IncludedFolders)
                 {
-                    GetDirectories(subSubDirs, aNode, p);
+                    if (subDir.FullName == Path.Combine(p.ProjDirectory, i.RelativePath.Trim(Path.DirectorySeparatorChar)))
+                    {
+                        aNode = new ProjectFolderNode() { Text = subDir.Name };
+                        aNode.Tag = subDir;
+                        subSubDirs = subDir.GetDirectories();
+                        if (subSubDirs.Length != 0)
+                        {
+                            GetDirectories(subSubDirs, aNode, p);
+                        }
+                        GetFiles(subDir, aNode, p);
+                        nodeToAddTo.Nodes.Add(aNode);
+                        break;
+                    }
                 }
-                GetFiles(subDir, aNode, p);
-                nodeToAddTo.Nodes.Add(aNode);
             }
         }
         private void GetFiles(DirectoryInfo dir, ProjectFolderNode nodeToAddTo, FitProj p)
@@ -149,9 +157,9 @@ namespace Sm4shCommand
 
                 var child = new ProjectFileNode() { Text = fileinfo.Name };
                 child.Tag = fileinfo;
-                foreach (var f in p.IncludedFiles)
+                foreach (ProjectItem f in p.IncludedFiles)
                 {
-                    if (fileinfo.FullName.Contains(f.RelativePath))
+                    if (fileinfo.FullName == Path.Combine(p.ProjDirectory, f.RelativePath.Trim(Path.DirectorySeparatorChar)))
                     {
                         nodeToAddTo.Nodes.Add(child);
                         break;
