@@ -103,14 +103,48 @@ namespace Sm4shCommand
 
             foreach (var pair in Projects)
             {
-                FitProj p = (FitProj)pair.Value;
-
-                FileInfo fileinfo = new FileInfo(p.ProjFilepath);
-                var projNode = new ProjectNode(p);
+                FitProj proj = (FitProj)pair.Value;
+                FileInfo fileinfo = new FileInfo(proj.ProjFilepath);
+                var projNode = new ProjectNode(proj);
                 projNode.Tag = fileinfo;
 
-                GetFiles(new DirectoryInfo(p.ProjDirectory), projNode, p);
-                GetDirectories(new DirectoryInfo(p.ProjDirectory).GetDirectories(), projNode, p);
+                ProjectExplorerNode nodeToAddTo = projNode;
+                foreach (var path in proj.Includes)
+                {
+                    string pathAggregate = string.Empty;
+                    string[] pathParts = path.Split(Path.DirectorySeparatorChar);
+                    for (int i = 0; i < pathParts.Length; i++)
+                    {
+                        string part = pathParts[i];
+                        pathAggregate = Path.Combine(pathAggregate, pathParts[i]);
+                        string treePath = Path.Combine(projNode.Text, pathAggregate);
+
+                        if (i == pathParts.Length - 1)
+                        {
+                            var node = new ProjectFileNode() { Text = part };
+                            node.Name = treePath;
+                            node.Tag = new FileInfo(Path.Combine(proj.ProjDirectory, pathAggregate));
+                            nodeToAddTo.Nodes.Add(node);
+                        }
+                        else if(nodeToAddTo.Nodes.Find(treePath, true).Length > 0)
+                        {
+                            nodeToAddTo = (ProjectExplorerNode)nodeToAddTo.Nodes.Find(treePath, true)[0];
+                        }
+                        else
+                        {
+                            var node = new ProjectFolderNode() { Text = part };
+                            node.Tag = new DirectoryInfo(Path.Combine(proj.ProjDirectory, pathAggregate));
+                            node.Name = treePath;
+                            nodeToAddTo.Nodes.Add(node);
+                            nodeToAddTo = node;
+                        }
+
+                    }
+                    nodeToAddTo = projNode;
+                }
+
+                // GetFiles(new DirectoryInfo(proj.ProjDirectory), projNode, proj);
+                // GetDirectories(new DirectoryInfo(proj.ProjDirectory).GetDirectories(), projNode, proj);
 
 
                 if (workspaceNode != null)
@@ -123,7 +157,6 @@ namespace Sm4shCommand
 
             Tree.treeView1.EndUpdate();
         }
-
         private void GetDirectories(DirectoryInfo[] subDirs, ProjectFolderNode nodeToAddTo, FitProj p)
         {
             ProjectFolderNode aNode;

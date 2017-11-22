@@ -18,8 +18,10 @@ namespace Sm4shCommand
     {
         public Project()
         {
+            Includes = new List<string>();
             IncludedFiles = new List<ProjectItem>();
             IncludedFolders = new List<ProjectItem>();
+            ProjectFolders = new List<string>();
         }
 
         // Project Properties
@@ -30,6 +32,10 @@ namespace Sm4shCommand
         public string ToolVer { get; set; }
         public string GameVer { get; set; }
         public ProjPlatform Platform { get; set; }
+
+        public List<string> Includes { get; set; }
+        public List<string> ProjectFolders { get; set; }
+
         public List<ProjectItem> IncludedFiles { get; set; }
 
         // Folders are only included here if empty.
@@ -188,6 +194,7 @@ namespace Sm4shCommand
                 {
                     var item = new ProjectItem();
                     item.RelativePath = Util.CanonicalizePath(child.Attributes["Include"].Value);
+
                     item.RealPath = Util.CanonicalizePath(Path.Combine(ProjDirectory, item.RelativePath.Trim(Path.DirectorySeparatorChar)));
                     if (child.HasChildNodes)
                     {
@@ -204,9 +211,9 @@ namespace Sm4shCommand
                     {
                         IncludedFolders.Add(item);
                     }
-                    else
+                    else if (child.Name == "Content")
                     {
-                        IncludedFiles.Add(item);
+                        Includes.Add(item.RelativePath);
                     }
                 }
             }
