@@ -6,6 +6,7 @@ using SALT.Moveset;
 using SALT.Moveset.AnimCMD;
 using SALT.Moveset.MSC;
 using System.Xml;
+using System.Linq;
 using SALT.PARAMS;
 using Sm4shCommand.GUI;
 using Sm4shCommand.GUI.Nodes;
@@ -112,7 +113,7 @@ namespace Sm4shCommand
                 foreach (var path in proj.Includes)
                 {
                     string pathAggregate = string.Empty;
-                    string[] pathParts = path.Split(Path.DirectorySeparatorChar);
+                    string[] pathParts = path.Split(Path.DirectorySeparatorChar).Where(x => !string.IsNullOrEmpty(x)).ToArray();
                     for (int i = 0; i < pathParts.Length; i++)
                     {
                         string part = pathParts[i];
@@ -126,7 +127,7 @@ namespace Sm4shCommand
                             node.Tag = new FileInfo(Path.Combine(proj.ProjDirectory, pathAggregate));
                             nodeToAddTo.Nodes.Add(node);
                         }
-                        else if(nodeToAddTo.Nodes.Find(treePath, true).Length > 0)
+                        else if (nodeToAddTo.Nodes.Find(treePath, true).Length > 0)
                         {
                             nodeToAddTo = (ProjectExplorerNode)nodeToAddTo.Nodes.Find(treePath, true)[0];
                         }
@@ -139,6 +140,31 @@ namespace Sm4shCommand
                             nodeToAddTo = node;
                         }
 
+                    }
+                    nodeToAddTo = projNode;
+                }
+
+                foreach (var path in proj.ProjectFolders)
+                {
+                    string pathAggregate = string.Empty;
+                    string[] pathParts = path.Split(Path.DirectorySeparatorChar).Where(x => !string.IsNullOrEmpty(x)).ToArray();
+                    for (int i = 0; i < pathParts.Length; i++)
+                    {
+                        string part = pathParts[i];
+                        pathAggregate = Path.Combine(pathAggregate, pathParts[i]);
+                        string treePath = Path.Combine(projNode.Text, pathAggregate);
+
+                        if (i == pathParts.Length - 1)
+                        {
+                            var node = new ProjectFolderNode() { Text = part };
+                            node.Name = treePath;
+                            node.Tag = new DirectoryInfo(Path.Combine(proj.ProjDirectory, pathAggregate));
+                            nodeToAddTo.Nodes.Add(node);
+                        }
+                        else if (nodeToAddTo.Nodes.Find(treePath, true).Length > 0)
+                        {
+                            nodeToAddTo = (ProjectExplorerNode)nodeToAddTo.Nodes.Find(treePath, true)[0];
+                        }
                     }
                     nodeToAddTo = projNode;
                 }

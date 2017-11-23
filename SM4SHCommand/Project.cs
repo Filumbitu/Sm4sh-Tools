@@ -198,18 +198,18 @@ namespace Sm4shCommand
                     item.RealPath = Util.CanonicalizePath(Path.Combine(ProjDirectory, item.RelativePath.Trim(Path.DirectorySeparatorChar)));
                     if (child.HasChildNodes)
                     {
-                        foreach (XmlNode child2 in child.ChildNodes)
-                        {
-                            if (child2.LocalName == "DependsUpon")
-                            {
-                                var path = Util.CanonicalizePath(Path.Combine(Path.GetDirectoryName(item.RelativePath), child2.InnerText));
-                                item.Depends.Add(IncludedFiles.Find(x => x.RelativePath == path));
-                            }
-                        }
+                        // foreach (XmlNode child2 in child.ChildNodes)
+                        // {
+                        //     if (child2.LocalName == "DependsUpon")
+                        //     {
+                        //         var path = Util.CanonicalizePath(Path.Combine(Path.GetDirectoryName(item.RelativePath), child2.InnerText));
+                        //         item.Depends.Add(IncludedFiles.Find(x => x.RelativePath == path));
+                        //     }
+                        // }
                     }
                     if (child.Name == "Folder")
                     {
-                        IncludedFolders.Add(item);
+                        ProjectFolders.Add(item.RelativePath);
                     }
                     else if (child.Name == "Content")
                     {
