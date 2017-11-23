@@ -142,6 +142,7 @@ namespace Sm4shCommand
             }
         }
 
+        public virtual void RenameProject(string newname) { }
         public virtual void ReadProject(string filepath) { }
         public virtual void SaveProject(string filepath) { }
         public virtual void SaveProject()
@@ -248,6 +249,17 @@ namespace Sm4shCommand
             var doc = new XmlDocument();
             doc.Load(filepath);
             ProjFile = doc;
+        }
+        public override void RenameProject(string newname)
+        {
+            ProjName = newname;
+            string oldPath = ProjFilepath;
+
+            string[] indexedPath = ProjFilepath.Split(Path.DirectorySeparatorChar).SkipWhile(x => string.IsNullOrEmpty(x)).ToArray();
+            indexedPath[indexedPath.Length - 1] = $"{newname}.fitproj";
+            ProjFilepath = string.Join(Path.DirectorySeparatorChar.ToString(), indexedPath);
+            File.Move(oldPath, ProjFilepath);
+            SaveProject();
         }
     }
     public class ProjectItem

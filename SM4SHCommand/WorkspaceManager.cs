@@ -126,7 +126,7 @@ namespace Sm4shCommand
                         {
                             if (!File.Exists(itmRelativePath))
                             {
-                                Util.LogMessage($"Couldn't find part of the path: \"{itmRelativePath}\"");
+                                Util.LogMessage($"Couldn't find part of the path: \"{itmRelativePath}\"", ConsoleColor.Red);
                             }
                             var node = new ProjectFileNode() { Text = part };
                             node.Name = treePath;
@@ -141,7 +141,7 @@ namespace Sm4shCommand
                         {
                             if (!Directory.Exists(itmRelativePath))
                             {
-                                Util.LogMessage($"Couldn't find part of the path: \"{itmRelativePath}\"");
+                                Util.LogMessage($"Couldn't find part of the path: \"{itmRelativePath}\"", ConsoleColor.Red);
                             }
                             var node = new ProjectFolderNode() { Text = part };
                             node.Tag = new DirectoryInfo(itmRelativePath);
@@ -169,7 +169,7 @@ namespace Sm4shCommand
                         {
                             if (!Directory.Exists(itmRelativePath))
                             {
-                                Util.LogMessage($"Directory not found:\"{itmRelativePath}\"");
+                                Util.LogMessage($"Directory not found:\"{itmRelativePath}\"", ConsoleColor.Red);
                             }
                             var node = new ProjectFolderNode() { Text = part };
                             node.Name = treePath;
