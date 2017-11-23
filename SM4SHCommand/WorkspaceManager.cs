@@ -70,6 +70,7 @@ namespace Sm4shCommand
 
         public void OpenProject(string filename)
         {
+            Util.LogMessage($"Opening project {filename}..");
             var p = ReadProjectFile(filename);
             Projects.Add(p.ProjName, p);
             PopulateTreeView();
@@ -110,21 +111,26 @@ namespace Sm4shCommand
                 projNode.Tag = fileinfo;
 
                 ProjectExplorerNode nodeToAddTo = projNode;
-                foreach (var path in proj.Includes)
+                foreach (var projItem in proj.Includes)
                 {
                     string pathAggregate = string.Empty;
-                    string[] pathParts = path.Split(Path.DirectorySeparatorChar).Where(x => !string.IsNullOrEmpty(x)).ToArray();
+                    string[] pathParts = projItem.RelativePath.Split(Path.DirectorySeparatorChar).Where(x => !string.IsNullOrEmpty(x)).ToArray();
                     for (int i = 0; i < pathParts.Length; i++)
                     {
                         string part = pathParts[i];
                         pathAggregate = Path.Combine(pathAggregate, pathParts[i]);
                         string treePath = Path.Combine(projNode.Text, pathAggregate);
+                        string itmRelativePath = Path.Combine(proj.ProjDirectory, pathAggregate);
 
                         if (i == pathParts.Length - 1)
                         {
+                            if (!File.Exists(itmRelativePath))
+                            {
+                                Util.LogMessage($"Couldn't find part of the path: \"{itmRelativePath}\"");
+                            }
                             var node = new ProjectFileNode() { Text = part };
                             node.Name = treePath;
-                            node.Tag = new FileInfo(Path.Combine(proj.ProjDirectory, pathAggregate));
+                            node.Tag = new FileInfo(itmRelativePath);
                             nodeToAddTo.Nodes.Add(node);
                         }
                         else if (nodeToAddTo.Nodes.Find(treePath, true).Length > 0)
@@ -133,8 +139,12 @@ namespace Sm4shCommand
                         }
                         else
                         {
+                            if (!Directory.Exists(itmRelativePath))
+                            {
+                                Util.LogMessage($"Couldn't find part of the path: \"{itmRelativePath}\"");
+                            }
                             var node = new ProjectFolderNode() { Text = part };
-                            node.Tag = new DirectoryInfo(Path.Combine(proj.ProjDirectory, pathAggregate));
+                            node.Tag = new DirectoryInfo(itmRelativePath);
                             node.Name = treePath;
                             nodeToAddTo.Nodes.Add(node);
                             nodeToAddTo = node;
@@ -144,21 +154,26 @@ namespace Sm4shCommand
                     nodeToAddTo = projNode;
                 }
 
-                foreach (var path in proj.ProjectFolders)
+                foreach (var projItem in proj.ProjectFolders)
                 {
                     string pathAggregate = string.Empty;
-                    string[] pathParts = path.Split(Path.DirectorySeparatorChar).Where(x => !string.IsNullOrEmpty(x)).ToArray();
+                    string[] pathParts = projItem.RelativePath.Split(Path.DirectorySeparatorChar).Where(x => !string.IsNullOrEmpty(x)).ToArray();
                     for (int i = 0; i < pathParts.Length; i++)
                     {
                         string part = pathParts[i];
                         pathAggregate = Path.Combine(pathAggregate, pathParts[i]);
                         string treePath = Path.Combine(projNode.Text, pathAggregate);
+                        string itmRelativePath = Path.Combine(proj.ProjDirectory, pathAggregate);
 
                         if (i == pathParts.Length - 1)
                         {
+                            if (!Directory.Exists(itmRelativePath))
+                            {
+                                Util.LogMessage($"Directory not found:\"{itmRelativePath}\"");
+                            }
                             var node = new ProjectFolderNode() { Text = part };
                             node.Name = treePath;
-                            node.Tag = new DirectoryInfo(Path.Combine(proj.ProjDirectory, pathAggregate));
+                            node.Tag = new DirectoryInfo(itmRelativePath);
                             nodeToAddTo.Nodes.Add(node);
                         }
                         else if (nodeToAddTo.Nodes.Find(treePath, true).Length > 0)
@@ -168,10 +183,6 @@ namespace Sm4shCommand
                     }
                     nodeToAddTo = projNode;
                 }
-
-                // GetFiles(new DirectoryInfo(proj.ProjDirectory), projNode, proj);
-                // GetDirectories(new DirectoryInfo(proj.ProjDirectory).GetDirectories(), projNode, proj);
-
 
                 if (workspaceNode != null)
                     workspaceNode.Nodes.Add(projNode);
@@ -182,49 +193,6 @@ namespace Sm4shCommand
                 Tree.treeView1.Nodes.Add(workspaceNode);
 
             Tree.treeView1.EndUpdate();
-        }
-        private void GetDirectories(DirectoryInfo[] subDirs, ProjectFolderNode nodeToAddTo, FitProj p)
-        {
-            ProjectFolderNode aNode;
-            DirectoryInfo[] subSubDirs;
-            foreach (DirectoryInfo subDir in subDirs)
-            {
-                foreach (ProjectItem i in p.IncludedFolders)
-                {
-                    if (subDir.FullName == Path.Combine(p.ProjDirectory, i.RelativePath.Trim(Path.DirectorySeparatorChar)))
-                    {
-                        aNode = new ProjectFolderNode() { Text = subDir.Name };
-                        aNode.Tag = subDir;
-                        subSubDirs = subDir.GetDirectories();
-                        if (subSubDirs.Length != 0)
-                        {
-                            GetDirectories(subSubDirs, aNode, p);
-                        }
-                        GetFiles(subDir, aNode, p);
-                        nodeToAddTo.Nodes.Add(aNode);
-                        break;
-                    }
-                }
-            }
-        }
-        private void GetFiles(DirectoryInfo dir, ProjectFolderNode nodeToAddTo, FitProj p)
-        {
-            foreach (var fileinfo in dir.GetFiles())
-            {
-                if (fileinfo.Name.EndsWith(".fitproj", StringComparison.InvariantCultureIgnoreCase))
-                    break;
-
-                var child = new ProjectFileNode() { Text = fileinfo.Name };
-                child.Tag = fileinfo;
-                foreach (ProjectItem f in p.IncludedFiles)
-                {
-                    if (fileinfo.FullName == Path.Combine(p.ProjDirectory, f.RelativePath.Trim(Path.DirectorySeparatorChar)))
-                    {
-                        nodeToAddTo.Nodes.Add(child);
-                        break;
-                    }
-                }
-            }
         }
     }
 }

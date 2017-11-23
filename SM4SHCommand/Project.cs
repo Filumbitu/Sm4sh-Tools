@@ -18,10 +18,8 @@ namespace Sm4shCommand
     {
         public Project()
         {
-            Includes = new List<string>();
-            IncludedFiles = new List<ProjectItem>();
-            IncludedFolders = new List<ProjectItem>();
-            ProjectFolders = new List<string>();
+            Includes = new List<ProjectItem>();
+            ProjectFolders = new List<ProjectItem>();
         }
 
         // Project Properties
@@ -33,13 +31,8 @@ namespace Sm4shCommand
         public string GameVer { get; set; }
         public ProjPlatform Platform { get; set; }
 
-        public List<string> Includes { get; set; }
-        public List<string> ProjectFolders { get; set; }
-
-        public List<ProjectItem> IncludedFiles { get; set; }
-
-        // Folders are only included here if empty.
-        public List<ProjectItem> IncludedFolders { get; set; }
+        public List<ProjectItem> Includes { get; set; }
+        public List<ProjectItem> ProjectFolders { get; set; }
 
         public ProjectItem GetFile(string path)
         {
@@ -47,7 +40,7 @@ namespace Sm4shCommand
         }
         public bool RemoveFile(ProjectItem item)
         {
-            bool result = IncludedFiles.Remove(item);
+            bool result = Includes.Remove(item);
             SaveProject();
             return result;
         }
@@ -64,22 +57,22 @@ namespace Sm4shCommand
             var item = new ProjectItem();
             item.RealPath = filepath;
             item.RelativePath = filepath.Replace(ProjDirectory, "");
-            IncludedFiles.Add(item);
+            Includes.Add(item);
             SaveProject();
         }
         public void RemoveFolder(string path)
         {
             // enumerate over COPIES of the lists so we don't
             // change the enumaration target when removing
-            foreach (var item in IncludedFolders.ToList())
+            foreach (var item in ProjectFolders.ToList())
             {
                 if (item.RelativePath.StartsWith(path))
-                    IncludedFolders.Remove(item);
+                    ProjectFolders.Remove(item);
             }
-            foreach (var file in IncludedFiles.ToList())
+            foreach (var file in Includes.ToList())
             {
                 if (file.RelativePath.StartsWith(path))
-                    IncludedFiles.Remove(file);
+                    Includes.Remove(file);
             }
             SaveProject();
         }
@@ -88,13 +81,13 @@ namespace Sm4shCommand
             var item = new ProjectItem();
             item.RealPath = path;
             item.RelativePath = path.Replace(ProjDirectory, "");
-            IncludedFolders.Add(item);
+            ProjectFolders.Add(item);
             SaveProject();
         }
 
         public void RenameFile(string filepath, string oldname, string newname)
         {
-            var entry = IncludedFiles.FirstOrDefault(x => x.RealPath == filepath || x.RelativePath == filepath);
+            var entry = Includes.FirstOrDefault(x => x.RealPath == filepath || x.RelativePath == filepath);
             entry.RelativePath = entry.RelativePath.Replace(oldname, newname);
             entry.RealPath = entry.RealPath.Replace(oldname, newname);
             if (entry.RealPath.EndsWith(".fitproj"))
@@ -109,7 +102,7 @@ namespace Sm4shCommand
         }
         public void RenameDirectory(string directory, int depth, string oldname, string newname)
         {
-            foreach (var entry in IncludedFiles)
+            foreach (var entry in Includes)
             {
                 // split the entry's path so we can index
                 // into the correct node and rename it
@@ -124,7 +117,7 @@ namespace Sm4shCommand
                     entry.RealPath = Path.Combine(this.ProjDirectory, string.Join(Path.DirectorySeparatorChar.ToString(), indexedPath));
                 }
             }
-            foreach (var entry in IncludedFolders)
+            foreach (var entry in ProjectFolders)
             {
                 // split the entry's path so we can index
                 // into the correct node and rename it
@@ -145,7 +138,7 @@ namespace Sm4shCommand
         {
             get
             {
-                return IncludedFiles.FirstOrDefault(x => x.RelativePath == key);
+                return Includes.FirstOrDefault(x => x.RelativePath == key);
             }
         }
 
@@ -209,11 +202,11 @@ namespace Sm4shCommand
                     }
                     if (child.Name == "Folder")
                     {
-                        ProjectFolders.Add(item.RelativePath);
+                        ProjectFolders.Add(item);
                     }
                     else if (child.Name == "Content")
                     {
-                        Includes.Add(item.RelativePath);
+                        Includes.Add(item);
                     }
                 }
             }
@@ -230,7 +223,7 @@ namespace Sm4shCommand
             writer.WriteAttributeString("Platform", Enum.GetName(typeof(ProjPlatform), Platform));
 
             writer.WriteStartElement("FileGroup");
-            foreach (var item in IncludedFolders)
+            foreach (var item in ProjectFolders)
             {
                 writer.WriteStartElement("Folder");
                 writer.WriteAttributeString("Include", item.RelativePath);
@@ -239,10 +232,10 @@ namespace Sm4shCommand
             // Dont need to write new start and 
             // end element unless we structurally
             // seperate included files from folders
-            //writer.WriteEndElement();
+            writer.WriteEndElement();
 
-            //writer.WriteStartElement("FileGroup");
-            foreach (var item in IncludedFiles)
+            writer.WriteStartElement("FileGroup");
+            foreach (var item in Includes)
             {
                 writer.WriteStartElement("Content");
                 writer.WriteAttributeString("Include", item.RelativePath);
