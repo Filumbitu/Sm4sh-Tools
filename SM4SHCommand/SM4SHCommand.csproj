@@ -86,7 +86,6 @@
     <Compile Include="GUI\NewProjectDialog.Designer.cs">
       <DependentUpon>NewProjectDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\Nodes\BaseNode.cs" />
     <Compile Include="GUI\Nodes\ProjectNodes.cs" />
     <Compile Include="GUI\WorkspaceExplorer.cs">
       <SubType>Form</SubType>
