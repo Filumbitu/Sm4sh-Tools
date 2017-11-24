@@ -86,13 +86,6 @@ namespace Sm4shCommand.GUI.Nodes
                 return (ProjectNode)node;
             }
         }
-        public string ProjectRelativePath
-        {
-            get
-            {
-                return null;
-            }
-        }
     }
 
     public class ProjectFolderNode : ProjectExplorerNode
