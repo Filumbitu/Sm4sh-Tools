@@ -18,13 +18,13 @@ namespace Sm4shCommand
     {
         public WorkspaceManager(WorkspaceExplorer tree)
         {
-            Projects = new SortedList<string, Project>();
+            Projects = new SortedList<Guid, Project>();
             Tree = tree;
         }
 
         public XmlDocument WorkspaceFile { get; set; }
 
-        public SortedList<string, Project> Projects { get; set; }
+        public SortedList<Guid, Project> Projects { get; set; }
 
         private WorkspaceExplorer Tree { get; set; }
         public string WorkspaceRoot { get; set; }
@@ -46,14 +46,14 @@ namespace Sm4shCommand
             {
                 var proj = ReadProjectFile(Path.Combine(WorkspaceRoot, node.Attributes["Path"].Value));
                 proj.ProjName = node.Attributes["Name"].Value;
-                Projects.Add(proj.ProjName, proj);
+                Projects.Add(proj.ProjectGuid, proj);
             }
             PopulateTreeView();
         }
 
         public void RemoveProject(Project p)
         {
-            Projects.Remove(p.ProjName);
+            Projects.Remove(p.ProjectGuid);
             var nodes = WorkspaceFile.SelectNodes("//Workspace//Project");
             foreach (XmlNode node in nodes)
             {
@@ -63,16 +63,12 @@ namespace Sm4shCommand
                 }
             }
         }
-        public void RemoveProject(string name)
-        {
-            RemoveProject(Projects[name]);
-        }
 
         public void OpenProject(string filename)
         {
             Util.LogMessage($"Opening project {filename}..");
             var p = ReadProjectFile(filename);
-            Projects.Add(p.ProjName, p);
+            Projects.Add(p.ProjectGuid, p);
             PopulateTreeView();
         }
         private Project ReadProjectFile(string filepath)

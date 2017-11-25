@@ -14,8 +14,8 @@ namespace Sm4shCommand.GUI.Nodes
         static ProjectExplorerNode()
         {
             _menu = new ContextMenuStrip();
-            _menu.Items.Add("Delete", null, DeleteAction);
             _menu.Items.Add("Rename", null, RenameAction);
+            _menu.Items.Add("Delete", null, DeleteAction);
         }
         public ProjectExplorerNode()
         {
@@ -37,7 +37,7 @@ namespace Sm4shCommand.GUI.Nodes
                 {
                     string name = ((FileInfo)this.Tag).FullName;
                     var n = this as ProjectNode;
-                    MainForm.Instance.WorkspaceManager.RemoveProject(n.ProjectName);
+                    MainForm.Instance.WorkspaceManager.RemoveProject(n.Project);
                     ((FileInfo)this.Tag).Delete();
                 }
                 else if (this.Tag is FileInfo)
@@ -94,9 +94,9 @@ namespace Sm4shCommand.GUI.Nodes
         {
             _menu.Items.Clear();
             _menu.Items.Add(new ToolStripMenuItem("Add", null,
+                                                 new ToolStripMenuItem("Existing Item", null, ImportFileAction),
                                                  new ToolStripMenuItem("New Item", null, NewFileAction),
-                                                 new ToolStripMenuItem("New Folder", null, AddFolderAction),
-                                                 new ToolStripMenuItem("Existing Item", null, ImportFileAction))
+                                                 new ToolStripMenuItem("New Folder", null, AddFolderAction))
 
                            );
             _menu.Items.Add("Rename", null, RenameAction);

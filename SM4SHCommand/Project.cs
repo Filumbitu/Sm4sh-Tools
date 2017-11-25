@@ -23,6 +23,7 @@ namespace Sm4shCommand
         }
 
         // Project Properties
+        public Guid ProjectGuid { get; set; }
         public XmlDocument ProjFile { get; set; }
         public string ProjFilepath { get; set; }
         public string ProjDirectory { get { return Path.GetDirectoryName(ProjFilepath); } }
@@ -172,9 +173,10 @@ namespace Sm4shCommand
             proj.Load(filepath);
 
             var node = proj.SelectSingleNode("//Project");
-            this.ToolVer = node.Attributes["ToolVer"].Value;
-            this.GameVer = node.Attributes["GameVer"].Value;
+            this.ToolVer = node.Attributes["ToolVersion"].Value;
+            this.GameVer = node.Attributes["GameVersion"].Value;
             this.ProjName = node.Attributes["Name"].Value;
+            this.ProjectGuid = Guid.Parse(proj.SelectSingleNode("//Project/ProjectGUID").InnerText);
 
             if (node.Attributes["Platform"].Value == "WiiU")
                 this.Platform = ProjPlatform.WiiU;
