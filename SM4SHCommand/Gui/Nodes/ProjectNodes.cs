@@ -29,24 +29,26 @@ namespace Sm4shCommand.GUI.Nodes
             {
                 if (this.Tag is DirectoryInfo)
                 {
-                    string name = ((DirectoryInfo)this.Tag).FullName;
+                    string path = ((DirectoryInfo)this.Tag).FullName;
                     ProjectNode.Project.RemoveFolder(this.FullPath.Replace(ProjectNode.Text, "").TrimStart(Path.DirectorySeparatorChar));
-                    ((DirectoryInfo)this.Tag).Delete(true);
+                    if (Directory.Exists(path))
+                        ((DirectoryInfo)this.Tag).Delete(true);
                 }
                 else if (this is ProjectNode)
                 {
-                    string name = ((FileInfo)this.Tag).FullName;
+                    string path = ((FileInfo)this.Tag).FullName;
                     var n = this as ProjectNode;
                     MainForm.Instance.WorkspaceManager.RemoveProject(n.Project);
-                    ((FileInfo)this.Tag).Delete();
+                    if (File.Exists(path))
+                        ((FileInfo)this.Tag).Delete();
                 }
                 else if (this.Tag is FileInfo)
                 {
-                    string name = ((FileInfo)this.Tag).FullName;
-                    ProjectNode.Project.RemoveFile(name);
-                    ((FileInfo)this.Tag).Delete();
+                    string path = ((FileInfo)this.Tag).FullName;
+                    ProjectNode.Project.RemoveFile(path);
+                    if (File.Exists(path))
+                        ((FileInfo)this.Tag).Delete();
                 }
-
                 this.Remove();
             }
         }
@@ -184,7 +186,7 @@ namespace Sm4shCommand.GUI.Nodes
             {
                 if (ofd.ShowDialog() == DialogResult.OK)
                 {
-                    foreach(TreeNode n in this.Nodes)
+                    foreach (TreeNode n in this.Nodes)
                     {
                         if (n.Text == ofd.SafeFileName)
                         {

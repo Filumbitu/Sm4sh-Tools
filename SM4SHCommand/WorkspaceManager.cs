@@ -44,8 +44,9 @@ namespace Sm4shCommand
             var nodes = WorkspaceFile.SelectNodes("//Workspace//Project");
             foreach (XmlNode node in nodes)
             {
-                var proj = ReadProjectFile(Path.Combine(WorkspaceRoot, node.Attributes["Path"].Value));
-                proj.ProjName = node.Attributes["Name"].Value;
+                string projectPath = Util.CanonicalizePath(Path.Combine(WorkspaceRoot, node.Attributes["Path"].Value));
+                var proj = ReadProjectFile(projectPath);
+                proj.ProjectGuid = Guid.Parse(node.Attributes["GUID"].Value);
                 Projects.Add(proj.ProjectGuid, proj);
             }
             PopulateTreeView();
@@ -101,7 +102,7 @@ namespace Sm4shCommand
 
             foreach (var pair in Projects)
             {
-                FitProj proj = (FitProj)pair.Value;
+                Project proj = pair.Value;
                 FileInfo fileinfo = new FileInfo(proj.ProjFilepath);
                 var projNode = new ProjectNode(proj);
                 projNode.Tag = fileinfo;

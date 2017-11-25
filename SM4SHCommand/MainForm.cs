@@ -78,8 +78,17 @@ namespace Sm4shCommand
         {
             if (ofDlg.ShowDialog() == DialogResult.OK)
             {
-                WorkspaceManager.OpenProject(ofDlg.FileName);
+                switch (ofDlg.FileName.Substring(ofDlg.FileName.IndexOf('.')))
+                {
+                    case ".wrkspc":
+                        WorkspaceManager.OpenWorkspace(ofDlg.FileName);
+                        break;
+                    case ".fitproj":
+                        WorkspaceManager.OpenProject(ofDlg.FileName);
+                        break;
+                }
             }
+
         }
     }
 }
