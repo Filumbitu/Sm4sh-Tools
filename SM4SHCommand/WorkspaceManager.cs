@@ -121,14 +121,28 @@ namespace Sm4shCommand
 
                         if (i == pathParts.Length - 1)
                         {
-                            var node = new ProjectFileNode() { Text = part };
-                            node.Name = treePath;
-                            node.Tag = new FileInfo(itmRelativePath);
-                            if (!File.Exists(itmRelativePath))
+                            ProjectExplorerNode node = null;
+                            if (projItem.IsDirectory)
                             {
-                                Util.LogMessage($"Couldn't find part of the path: \"{itmRelativePath}\"", ConsoleColor.Red);
-                                node.ForeColor = System.Drawing.Color.Red;
+                                node = new ProjectFolderNode() { Text = part };
+                                node.Tag = new DirectoryInfo(itmRelativePath);
+                                if (!Directory.Exists(itmRelativePath))
+                                {
+                                    Util.LogMessage($"Couldn't find part of the path: \"{itmRelativePath}\"", ConsoleColor.Red);
+                                    node.ForeColor = System.Drawing.Color.Red;
+                                }
                             }
+                            else
+                            {
+                                node = new ProjectFileNode() { Text = part };
+                                node.Tag = new FileInfo(itmRelativePath);
+                                if (!File.Exists(itmRelativePath))
+                                {
+                                    Util.LogMessage($"Couldn't find part of the path: \"{itmRelativePath}\"", ConsoleColor.Red);
+                                    node.ForeColor = System.Drawing.Color.Red;
+                                }
+                            }
+                            node.Name = treePath;
                             nodeToAddTo.Nodes.Add(node);
                         }
                         else if (nodeToAddTo.Nodes.Find(treePath, true).Length > 0)
@@ -149,38 +163,6 @@ namespace Sm4shCommand
                             nodeToAddTo = node;
                         }
 
-                    }
-                    nodeToAddTo = projNode;
-                }
-
-                foreach (var projItem in proj.ProjectFolders)
-                {
-                    string pathAggregate = string.Empty;
-                    string[] pathParts = projItem.RelativePath.Split(Path.DirectorySeparatorChar).Where(x => !string.IsNullOrEmpty(x)).ToArray();
-                    for (int i = 0; i < pathParts.Length; i++)
-                    {
-                        string part = pathParts[i];
-                        pathAggregate = Path.Combine(pathAggregate, pathParts[i]);
-                        string treePath = Path.Combine(projNode.Text, pathAggregate);
-                        string itmRelativePath = Path.Combine(proj.ProjDirectory, pathAggregate);
-
-                        if (i == pathParts.Length - 1)
-                        {
-
-                            var node = new ProjectFolderNode() { Text = part };
-                            node.Name = treePath;
-                            node.Tag = new DirectoryInfo(itmRelativePath);
-                            if (!Directory.Exists(itmRelativePath))
-                            {
-                                Util.LogMessage($"Directory not found:\"{itmRelativePath}\"", ConsoleColor.Red);
-                                node.ForeColor = System.Drawing.Color.Red;
-                            }
-                            nodeToAddTo.Nodes.Add(node);
-                        }
-                        else if (nodeToAddTo.Nodes.Find(treePath, true).Length > 0)
-                        {
-                            nodeToAddTo = (ProjectExplorerNode)nodeToAddTo.Nodes.Find(treePath, true)[0];
-                        }
                     }
                     nodeToAddTo = projNode;
                 }

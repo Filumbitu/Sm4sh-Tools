@@ -19,7 +19,6 @@ namespace Sm4shCommand
         public Project()
         {
             Includes = new List<ProjectItem>();
-            ProjectFolders = new List<ProjectItem>();
         }
 
         // Project Properties
@@ -33,7 +32,6 @@ namespace Sm4shCommand
         public ProjPlatform Platform { get; set; }
 
         public List<ProjectItem> Includes { get; set; }
-        public List<ProjectItem> ProjectFolders { get; set; }
 
         public ProjectItem GetFile(string path)
         {
@@ -57,19 +55,14 @@ namespace Sm4shCommand
         {
             var item = new ProjectItem();
             item.RealPath = filepath;
-            item.RelativePath = filepath.Replace(ProjDirectory, "");
+            item.RelativePath = filepath.Replace(ProjDirectory, "").TrimStart(Path.DirectorySeparatorChar);
             Includes.Add(item);
             SaveProject();
         }
         public void RemoveFolder(string path)
         {
-            // enumerate over COPIES of the lists so we don't
+            // enumerate over COPIES of the list so we don't
             // change the enumaration target when removing
-            foreach (var item in ProjectFolders.ToList())
-            {
-                if (item.RelativePath.StartsWith(path))
-                    ProjectFolders.Remove(item);
-            }
             foreach (var file in Includes.ToList())
             {
                 if (file.RelativePath.StartsWith(path))
@@ -81,8 +74,9 @@ namespace Sm4shCommand
         {
             var item = new ProjectItem();
             item.RealPath = path;
-            item.RelativePath = path.Replace(ProjDirectory, "");
-            ProjectFolders.Add(item);
+            item.RelativePath = path.Replace(ProjDirectory, "").TrimStart(Path.DirectorySeparatorChar);
+            item.IsDirectory = true;
+            Includes.Add(item);
             SaveProject();
         }
 
@@ -114,22 +108,7 @@ namespace Sm4shCommand
                 if (indexedPath[depth] == oldname)
                 {
                     indexedPath[depth] = newname;
-                    entry.RelativePath = Path.DirectorySeparatorChar + string.Join(Path.DirectorySeparatorChar.ToString(), indexedPath);
-                    entry.RealPath = Path.Combine(this.ProjDirectory, string.Join(Path.DirectorySeparatorChar.ToString(), indexedPath));
-                }
-            }
-            foreach (var entry in ProjectFolders)
-            {
-                // split the entry's path so we can index
-                // into the correct node and rename it
-                string[] indexedPath = entry.RelativePath.Split(Path.DirectorySeparatorChar).SkipWhile(x => string.IsNullOrEmpty(x)).ToArray();
-                if (depth >= indexedPath.Length)
-                    continue;
-
-                if (indexedPath[depth] == oldname)
-                {
-                    indexedPath[depth] = newname;
-                    entry.RelativePath = Path.DirectorySeparatorChar + string.Join(Path.DirectorySeparatorChar.ToString(), indexedPath);
+                    entry.RelativePath = string.Join(Path.DirectorySeparatorChar.ToString(), indexedPath);
                     entry.RealPath = Path.Combine(this.ProjDirectory, string.Join(Path.DirectorySeparatorChar.ToString(), indexedPath));
                 }
             }
@@ -205,7 +184,8 @@ namespace Sm4shCommand
                     }
                     if (child.Name == "Folder")
                     {
-                        ProjectFolders.Add(item);
+                        item.IsDirectory = true;
+                        Includes.Add(item);
                     }
                     else if (child.Name == "Content")
                     {
@@ -221,12 +201,14 @@ namespace Sm4shCommand
             writer.WriteStartDocument();
             writer.WriteStartElement("Project");
             writer.WriteAttributeString("Name", ProjName);
-            writer.WriteAttributeString("ToolVer", ToolVer);
-            writer.WriteAttributeString("GameVer", GameVer);
+            writer.WriteAttributeString("ToolVersion", ToolVer);
+            writer.WriteAttributeString("GameVersion", GameVer);
             writer.WriteAttributeString("Platform", Enum.GetName(typeof(ProjPlatform), Platform));
-
+            writer.WriteStartElement("ProjectGUID");
+            writer.WriteString(ProjectGuid.ToString());
+            writer.WriteEndElement();
             writer.WriteStartElement("FileGroup");
-            foreach (var item in ProjectFolders)
+            foreach (var item in Includes.Where(x => x.IsDirectory))
             {
                 writer.WriteStartElement("Folder");
                 writer.WriteAttributeString("Include", item.RelativePath);
@@ -238,7 +220,7 @@ namespace Sm4shCommand
             writer.WriteEndElement();
 
             writer.WriteStartElement("FileGroup");
-            foreach (var item in Includes)
+            foreach (var item in Includes.Where(x => !x.IsDirectory))
             {
                 writer.WriteStartElement("Content");
                 writer.WriteAttributeString("Include", item.RelativePath);
@@ -272,13 +254,7 @@ namespace Sm4shCommand
         }
         public string RelativePath { get; set; }
         public string RealPath { get; set; }
-        public bool IsDirectory
-        {
-            get
-            {
-                return RelativePath.EndsWith("/") || RelativePath.EndsWith("\\");
-            }
-        }
+        public bool IsDirectory { get; set; }
         public List<ProjectItem> Depends { get; set; }
         public override string ToString()
         {

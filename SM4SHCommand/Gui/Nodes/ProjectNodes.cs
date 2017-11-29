@@ -30,7 +30,7 @@ namespace Sm4shCommand.GUI.Nodes
                 if (this.Tag is DirectoryInfo)
                 {
                     string path = ((DirectoryInfo)this.Tag).FullName;
-                    ProjectNode.Project.RemoveFolder(this.FullPath.Replace(ProjectNode.Text, "").TrimStart(Path.DirectorySeparatorChar));
+                    ProjectNode.Project.RemoveFolder(Util.CanonicalizePath(this.FullPath.Replace(ProjectNode.FullPath, "").TrimStart(Path.DirectorySeparatorChar)));
                     if (Directory.Exists(path))
                         ((DirectoryInfo)this.Tag).Delete(true);
                 }
@@ -127,7 +127,7 @@ namespace Sm4shCommand.GUI.Nodes
             DirectoryInfo info = (DirectoryInfo)this.Tag;
 
             // remove project node from path
-            string search = this.FullPath.ReplaceFirstOccurance(ProjectNode.Text, "");
+            string search = this.FullPath.ReplaceFirstOccurance(ProjectNode.FullPath, "").TrimStart(Path.DirectorySeparatorChar);
 
             // Update text field for node.FullPath
             string oldname = this.Text;
@@ -137,7 +137,7 @@ namespace Sm4shCommand.GUI.Nodes
             // of the node to be renamed
             var indexedPath = search.Split(Path.DirectorySeparatorChar).SkipWhile(x => string.IsNullOrEmpty(x)).ToArray();
 
-            int count = this.FullPath.Count(x => x == Path.DirectorySeparatorChar) - 1;
+            int count = search.Count(x => x == Path.DirectorySeparatorChar);
             indexedPath[count] = newname;
 
             // use new path to update project references and
