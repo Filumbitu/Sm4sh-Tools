@@ -18,58 +18,52 @@ namespace Sm4shCommand
     {
         public WorkspaceManager(WorkspaceExplorer tree)
         {
-            Projects = new SortedList<Guid, Project>();
             Tree = tree;
         }
 
-        public XmlDocument WorkspaceFile { get; set; }
-
-        public SortedList<Guid, Project> Projects { get; set; }
-
+        public Workspace TargetWorkspace { get; set; }
         private WorkspaceExplorer Tree { get; set; }
-        public string WorkspaceRoot { get; set; }
-        public string TargetProject { get; set; }
-        public string WorkspaceName { get; set; }
 
         public void OpenWorkspace(string filepath)
         {
-            WorkspaceFile = new XmlDocument();
-            WorkspaceFile.Load(filepath);
+            TargetWorkspace = new Workspace();
+            TargetWorkspace.WorkspaceFile = new XmlDocument();
+            TargetWorkspace.WorkspaceFile.Load(filepath);
 
-            WorkspaceRoot = Path.GetDirectoryName(filepath);
+            TargetWorkspace.WorkspaceRoot = Path.GetDirectoryName(filepath);
 
-            var rootNode = WorkspaceFile.SelectSingleNode("//Workspace");
+            var rootNode = TargetWorkspace.WorkspaceFile.SelectSingleNode("//Workspace");
 
-            WorkspaceName = rootNode.Attributes["Name"].Value;
-            var nodes = WorkspaceFile.SelectNodes("//Workspace//Project");
+            TargetWorkspace.WorkspaceName = rootNode.Attributes["Name"].Value;
+            var nodes = TargetWorkspace.WorkspaceFile.SelectNodes("//Workspace//Project");
             foreach (XmlNode node in nodes)
             {
-                string projectPath = Util.CanonicalizePath(Path.Combine(WorkspaceRoot, node.Attributes["Path"].Value));
+                string projectPath = Util.CanonicalizePath(Path.Combine(TargetWorkspace.WorkspaceRoot, node.Attributes["Path"].Value));
                 var proj = ReadProjectFile(projectPath);
                 proj.ProjectGuid = Guid.Parse(node.Attributes["GUID"].Value);
-                Projects.Add(proj.ProjectGuid, proj);
+                TargetWorkspace.Projects.Add(proj.ProjectGuid, proj);
             }
             PopulateTreeView();
         }
         public void CloseWorkspace()
         {
-            WorkspaceFile = null;
-            TargetProject = null;
-            WorkspaceName = string.Empty;
-            WorkspaceRoot = string.Empty;
-            Projects.Clear();
+            TargetWorkspace.WorkspaceFile = null;
+            TargetWorkspace.TargetProject = null;
+            TargetWorkspace.WorkspaceName = string.Empty;
+            TargetWorkspace.WorkspaceRoot = string.Empty;
+            TargetWorkspace.Projects.Clear();
             Tree.treeView1.Nodes.Clear();
         }
 
         public void RemoveProject(Project p)
         {
-            Projects.Remove(p.ProjectGuid);
-            var nodes = WorkspaceFile.SelectNodes("//Workspace//Project");
+            TargetWorkspace.Projects.Remove(p.ProjectGuid);
+            var nodes = TargetWorkspace.WorkspaceFile.SelectNodes("//Workspace//Project");
             foreach (XmlNode node in nodes)
             {
                 if (node.Attributes["Name"].Value == p.ProjName)
                 {
-                    WorkspaceFile.SelectSingleNode("//Workspace").RemoveChild(node);
+                    TargetWorkspace.WorkspaceFile.SelectSingleNode("//Workspace").RemoveChild(node);
                 }
             }
         }
@@ -78,7 +72,7 @@ namespace Sm4shCommand
         {
             Util.LogMessage($"Opening project {filename}..");
             var p = ReadProjectFile(filename);
-            Projects.Add(p.ProjectGuid, p);
+            TargetWorkspace.Projects.Add(p.ProjectGuid, p);
             PopulateTreeView();
         }
         private Project ReadProjectFile(string filepath)
@@ -103,13 +97,13 @@ namespace Sm4shCommand
             // If we're actually opening a full workspace and
             // not just a single project, add all projects
             // as children to the workspace
-            if (!string.IsNullOrEmpty(WorkspaceName))
+            if (!string.IsNullOrEmpty(TargetWorkspace.WorkspaceName))
             {
-                workspaceNode = new TreeNode(WorkspaceName);
+                workspaceNode = new TreeNode(TargetWorkspace.WorkspaceName);
                 workspaceNode.ImageIndex = workspaceNode.SelectedImageIndex = 2;
             }
 
-            foreach (var pair in Projects)
+            foreach (var pair in TargetWorkspace.Projects)
             {
                 Project proj = pair.Value;
                 FileInfo fileinfo = new FileInfo(proj.ProjFilepath);

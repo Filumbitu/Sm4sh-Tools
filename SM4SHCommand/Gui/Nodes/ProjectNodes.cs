@@ -260,4 +260,11 @@ namespace Sm4shCommand.GUI.Nodes
             Project.RenameProject(newname);
         }
     }
+    public class WorkspaceNode : ProjectFolderNode
+    {
+        public WorkspaceNode()
+        {
+
+        }
+    }
 }

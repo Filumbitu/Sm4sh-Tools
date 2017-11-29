@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
-
 using System.Reflection;
 using System.Globalization;
 
@@ -34,6 +33,11 @@ namespace Sm4shCommand
         {
             Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
             Application.Run(MainForm.Instance);
+        }
+
+        public static bool Open(string filename)
+        {
+            throw new NotImplementedException();
         }
 
         private static void RegisterFileAssociations()

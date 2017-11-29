@@ -22,5 +22,33 @@ namespace Sm4shCommand.Properties {
                 return defaultInstance;
             }
         }
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringCollection RecentFiles
+        {
+            get
+            {
+                return ((global::System.Collections.Specialized.StringCollection)(this["RecentFiles"]));
+            }
+            set
+            {
+                this["RecentFiles"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int RecentFilesMax
+        {
+            get
+            {
+                return ((int)(this["RecentFilesMax"]));
+            }
+            set
+            {
+                this["RecentFilesMax"] = value;
+            }
+        }
     }
 }

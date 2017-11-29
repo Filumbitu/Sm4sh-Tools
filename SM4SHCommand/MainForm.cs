@@ -21,11 +21,15 @@ namespace Sm4shCommand
             get { return _instance != null ? _instance : (_instance = new MainForm()); }
         }
         private static MainForm _instance;
+        RecentFileHandler RecentFileHandler;
 
         public MainForm()
         {
             InitializeComponent();
             this.Text = $"{Program.AssemblyTitle} {Program.Version} BETA - ";
+
+            RecentFileHandler = new RecentFileHandler(this.components);
+            RecentFileHandler.RecentFileToolStripItem = this.recentFilesStripMenuItem;
         }
 
         public const string FileFilter =
@@ -87,13 +91,17 @@ namespace Sm4shCommand
                         WorkspaceManager.OpenProject(ofDlg.FileName);
                         break;
                 }
+                RecentFileHandler.AddFile(ofDlg.FileName);
             }
-
         }
 
         private void closeWorkspaceToolStripMenuItem_Click(object sender, EventArgs e)
         {
             WorkspaceManager.CloseWorkspace();
+        }
+        private void RecentFilesStripMenuItem_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            Program.Open(((RecentFileHandler.FileMenuItem)e.ClickedItem).FileName);
         }
     }
 }
