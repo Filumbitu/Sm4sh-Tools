@@ -51,6 +51,15 @@ namespace Sm4shCommand
             }
             PopulateTreeView();
         }
+        public void CloseWorkspace()
+        {
+            WorkspaceFile = null;
+            TargetProject = null;
+            WorkspaceName = string.Empty;
+            WorkspaceRoot = string.Empty;
+            Projects.Clear();
+            Tree.treeView1.Nodes.Clear();
+        }
 
         public void RemoveProject(Project p)
         {

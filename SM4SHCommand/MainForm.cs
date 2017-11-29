@@ -90,5 +90,10 @@ namespace Sm4shCommand
             }
 
         }
+
+        private void closeWorkspaceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            WorkspaceManager.CloseWorkspace();
+        }
     }
 }

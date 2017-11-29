@@ -75,6 +75,7 @@
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.splitter2 = new System.Windows.Forms.Splitter();
             this.dockPanel1 = new WeifenLuo.WinFormsUI.Docking.DockPanel();
+            this.closeWorkspaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -102,6 +103,7 @@
             this.openToolStripMenuItem,
             this.toolStripSeparator1,
             this.closeToolStripMenuItem,
+            this.closeWorkspaceToolStripMenuItem,
             this.toolStripSeparator5,
             this.saveToolStripMenuItem,
             this.saveAsToolStripMenuItem,
@@ -462,6 +464,13 @@
             this.dockPanel1.Size = new System.Drawing.Size(841, 409);
             this.dockPanel1.TabIndex = 16;
             // 
+            // closeWorkspaceToolStripMenuItem
+            // 
+            this.closeWorkspaceToolStripMenuItem.Name = "closeWorkspaceToolStripMenuItem";
+            this.closeWorkspaceToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.closeWorkspaceToolStripMenuItem.Text = "Close Workspace";
+            this.closeWorkspaceToolStripMenuItem.Click += new System.EventHandler(this.closeWorkspaceToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -543,6 +552,7 @@
         private System.Windows.Forms.ToolStripMenuItem newProjectToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem existingProjectToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exportToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem closeWorkspaceToolStripMenuItem;
     }
 }
 
