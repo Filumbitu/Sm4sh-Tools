@@ -11,6 +11,8 @@ using SALT.Moveset.AnimCMD;
 using System.ComponentModel;
 using SALT.Moveset.MSC;
 using WeifenLuo.WinFormsUI.Docking;
+using Sm4shCommand.GUI.Editors;
+using System.Reflection;
 
 namespace Sm4shCommand
 {
@@ -18,7 +20,7 @@ namespace Sm4shCommand
     {
         public static MainForm Instance
         {
-            get { return _instance != null ? _instance : (_instance = new MainForm()); }
+            get { return _instance ?? (_instance = new MainForm()); }
         }
         private static MainForm _instance;
         RecentFileHandler RecentFileHandler;
@@ -28,8 +30,10 @@ namespace Sm4shCommand
             InitializeComponent();
             this.Text = $"{Program.AssemblyTitle} {Program.Version} BETA - ";
 
-            RecentFileHandler = new RecentFileHandler(this.components);
-            RecentFileHandler.RecentFileToolStripItem = this.recentFilesStripMenuItem;
+            RecentFileHandler = new RecentFileHandler(this.components)
+            {
+                RecentFileToolStripItem = this.recentFilesStripMenuItem
+            };
         }
 
         public const string FileFilter =
@@ -46,7 +50,7 @@ namespace Sm4shCommand
         internal WorkspaceExplorer Explorer { get; set; }
         internal WorkspaceManager WorkspaceManager { get; set; }
 
-        private void aboutToolStripMenuItem_Click_1(object sender, EventArgs e)
+        private void AboutToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
             var abtBox = new AboutBox();
             abtBox.ShowDialog();
@@ -72,13 +76,13 @@ namespace Sm4shCommand
             WorkspaceManager = new WorkspaceManager(Explorer);
         }
 
-        private void projectToolStripMenuItem1_Click(object sender, EventArgs e)
+        private void ProjectToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             NewProjectDialog dlg = new NewProjectDialog();
             dlg.ShowDialog();
         }
 
-        private void fOpen_Click(object sender, EventArgs e)
+        private void FOpen_Click(object sender, EventArgs e)
         {
             if (ofDlg.ShowDialog() == DialogResult.OK)
             {
@@ -95,7 +99,7 @@ namespace Sm4shCommand
             }
         }
 
-        private void closeWorkspaceToolStripMenuItem_Click(object sender, EventArgs e)
+        private void CloseWorkspaceToolStripMenuItem_Click(object sender, EventArgs e)
         {
             WorkspaceManager.CloseWorkspace();
         }

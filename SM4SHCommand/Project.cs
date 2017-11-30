@@ -53,9 +53,11 @@ namespace Sm4shCommand
 
         public void AddFile(string filepath)
         {
-            var item = new ProjectItem();
-            item.RealPath = filepath;
-            item.RelativePath = filepath.Replace(ProjDirectory, "").TrimStart(Path.DirectorySeparatorChar);
+            var item = new ProjectItem
+            {
+                RealPath = filepath,
+                RelativePath = filepath.Replace(ProjDirectory, "").TrimStart(Path.DirectorySeparatorChar)
+            };
             Includes.Add(item);
             SaveProject();
         }
@@ -72,10 +74,12 @@ namespace Sm4shCommand
         }
         public void AddFolder(string path)
         {
-            var item = new ProjectItem();
-            item.RealPath = path;
-            item.RelativePath = path.Replace(ProjDirectory, "").TrimStart(Path.DirectorySeparatorChar);
-            item.IsDirectory = true;
+            var item = new ProjectItem
+            {
+                RealPath = path,
+                RelativePath = path.Replace(ProjDirectory, "").TrimStart(Path.DirectorySeparatorChar),
+                IsDirectory = true
+            };
             Includes.Add(item);
             SaveProject();
         }
@@ -167,10 +171,12 @@ namespace Sm4shCommand
             {
                 foreach (XmlNode child in n.ChildNodes)
                 {
-                    var item = new ProjectItem();
-                    item.RelativePath = Util.CanonicalizePath(child.Attributes["Include"].Value);
-
+                    var item = new ProjectItem
+                    {
+                        RelativePath = Util.CanonicalizePath(child.Attributes["Include"].Value)
+                    };
                     item.RealPath = Util.CanonicalizePath(Path.Combine(ProjDirectory, item.RelativePath.Trim(Path.DirectorySeparatorChar)));
+
                     if (child.HasChildNodes)
                     {
                         // foreach (XmlNode child2 in child.ChildNodes)

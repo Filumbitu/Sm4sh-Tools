@@ -26,8 +26,10 @@ namespace Sm4shCommand
 
         public void OpenWorkspace(string filepath)
         {
-            TargetWorkspace = new Workspace();
-            TargetWorkspace.WorkspaceFile = new XmlDocument();
+            TargetWorkspace = new Workspace
+            {
+                WorkspaceFile = new XmlDocument()
+            };
             TargetWorkspace.WorkspaceFile.Load(filepath);
 
             TargetWorkspace.WorkspaceRoot = Path.GetDirectoryName(filepath);
@@ -107,8 +109,10 @@ namespace Sm4shCommand
             {
                 Project proj = pair.Value;
                 FileInfo fileinfo = new FileInfo(proj.ProjFilepath);
-                var projNode = new ProjectNode(proj);
-                projNode.Tag = fileinfo;
+                var projNode = new ProjectNode(proj)
+                {
+                    Tag = fileinfo
+                };
 
                 ProjectExplorerNode nodeToAddTo = projNode;
                 foreach (var projItem in proj.Includes)
@@ -137,7 +141,8 @@ namespace Sm4shCommand
                             }
                             else
                             {
-                                node = new ProjectFileNode() { Text = part };
+                                node = TreeNodeFactory.NodeFromExtension(part.Substring(part.IndexOf('.')));
+                                node.Text = part;
                                 node.Tag = new FileInfo(itmRelativePath);
                                 if (!File.Exists(itmRelativePath))
                                 {

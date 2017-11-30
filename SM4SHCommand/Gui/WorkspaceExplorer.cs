@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sm4shCommand.GUI.Nodes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -32,6 +33,16 @@ namespace Sm4shCommand.GUI
             {
                 ((Nodes.ProjectExplorerNode)e.Node).EndRename(e.Label);
             }
+        }
+
+        private void treeView1_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            var editor = ((ProjectExplorerNode)e.Node).GetEditor();
+            if (editor != null)
+            {
+                MainForm.Instance.AddDockedControl(editor, DockState.Document);
+            }
+            
         }
     }
 }

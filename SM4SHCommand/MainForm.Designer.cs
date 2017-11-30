@@ -136,7 +136,7 @@
             | System.Windows.Forms.Keys.N)));
             this.projectToolStripMenuItem1.Size = new System.Drawing.Size(225, 22);
             this.projectToolStripMenuItem1.Text = "Project...";
-            this.projectToolStripMenuItem1.Click += new System.EventHandler(this.projectToolStripMenuItem1_Click);
+            this.projectToolStripMenuItem1.Click += new System.EventHandler(this.ProjectToolStripMenuItem1_Click);
             // 
             // projectFromExistingCodeToolStripMenuItem
             // 
@@ -186,7 +186,7 @@
             this.fOpen.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
             this.fOpen.Size = new System.Drawing.Size(258, 22);
             this.fOpen.Text = "File...";
-            this.fOpen.Click += new System.EventHandler(this.fOpen_Click);
+            this.fOpen.Click += new System.EventHandler(this.FOpen_Click);
             // 
             // toolStripSeparator1
             // 
@@ -272,7 +272,7 @@
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.aboutToolStripMenuItem.Text = "About";
-            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click_1);
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.AboutToolStripMenuItem_Click_1);
             // 
             // projectToolStripMenuItem
             // 
@@ -474,7 +474,7 @@
             this.closeWorkspaceToolStripMenuItem.Name = "closeWorkspaceToolStripMenuItem";
             this.closeWorkspaceToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
             this.closeWorkspaceToolStripMenuItem.Text = "Close Workspace";
-            this.closeWorkspaceToolStripMenuItem.Click += new System.EventHandler(this.closeWorkspaceToolStripMenuItem_Click);
+            this.closeWorkspaceToolStripMenuItem.Click += new System.EventHandler(this.CloseWorkspaceToolStripMenuItem_Click);
             // 
             // toolStripSeparator3
             // 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sm4shCommand.GUI.Editors;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -59,6 +60,7 @@ namespace Sm4shCommand.GUI.Nodes
             this.BeginEdit();
         }
         public virtual void EndRename(string newname) { }
+        public virtual EditorBase GetEditor() { return null; }
 
         protected static void DeleteAction(object sender, EventArgs e)
         {
@@ -68,6 +70,7 @@ namespace Sm4shCommand.GUI.Nodes
         {
             GetInstance<ProjectExplorerNode>().BeginRename();
         }
+
         protected static T GetInstance<T>() where T : TreeNode
         {
             return MainForm.Instance.Explorer.treeView1.SelectedNode as T;
@@ -234,6 +237,7 @@ namespace Sm4shCommand.GUI.Nodes
     // Inherit from folder as the proj file is treated as one
     public class ProjectNode : ProjectFolderNode
     {
+        public ProjectNode() { }
         public ProjectNode(Project p)
         {
             this.Project = p;
@@ -258,13 +262,6 @@ namespace Sm4shCommand.GUI.Nodes
         public override void EndRename(string newname)
         {
             Project.RenameProject(newname);
-        }
-    }
-    public class WorkspaceNode : ProjectFolderNode
-    {
-        public WorkspaceNode()
-        {
-
         }
     }
 }

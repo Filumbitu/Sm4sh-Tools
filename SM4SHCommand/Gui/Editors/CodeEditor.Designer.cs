@@ -1,4 +1,4 @@
-﻿namespace Sm4shCommand.GUI
+﻿namespace Sm4shCommand.GUI.Editors
 {
     partial class CodeEditor
     {
