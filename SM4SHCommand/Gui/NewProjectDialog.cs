@@ -15,8 +15,19 @@ namespace Sm4shCommand.GUI
         public NewProjectDialog()
         {
             InitializeComponent();
-        }
 
+        }
+        private WorkspaceManager Manager { get; set; }
+        private string WorkspacePath
+        {
+            get
+            {
+                if (txtWorkspace.Enabled)
+                    return Path.Combine(txtLocation.Text.TrimEnd(Path.DirectorySeparatorChar), txtWorkspace.Text);
+                else
+                    return Manager.TargetWorkspace.WorkspaceRoot;
+            }
+        }
         private void button4_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
@@ -25,18 +36,24 @@ namespace Sm4shCommand.GUI
 
         private void NewProjectDialog_Load(object sender, EventArgs e)
         {
-            if (!Directory.Exists(GLOBALS.DefaultProjectDirectory))
-            {
-                Directory.CreateDirectory(GLOBALS.DefaultProjectDirectory);
-            }
-            txtLocation.Text = GLOBALS.DefaultProjectDirectory;
+            Manager = MainForm.Instance.WorkspaceManager;
+            txtName.Text = txtWorkspace.Text = "NewProject";
 
-            int i = 1;
-            while (Directory.Exists($"NewProject{i}"))
+            if (Manager.TargetWorkspace != null)
             {
-                i++;
+                chkCurWorkspace.Checked = true;
+                chkNewDir.Checked = txtWorkspace.Enabled = false;
+                txtLocation.Text = Manager.TargetWorkspace.WorkspaceRoot;
             }
-            txtName.Text = $"NewProject{i}";
+            else
+            {
+                if (!Directory.Exists(GLOBALS.DefaultProjectDirectory))
+                {
+                    Directory.CreateDirectory(GLOBALS.DefaultProjectDirectory);
+                }
+                txtLocation.Text = GLOBALS.DefaultProjectDirectory;
+            }
+
 
             InitializeProjectTemplates();
 
@@ -46,22 +63,18 @@ namespace Sm4shCommand.GUI
 
         private void txtName_TextChanged(object sender, EventArgs e)
         {
-            if (!chkCurWorkspace.Checked)
-            {
-                txtWorkspace.Text = ((TextBox)sender).Text;
-            }
+
         }
 
         private void btnOkay_Click(object sender, EventArgs e)
         {
-            if (!Directory.Exists(Path.Combine(txtLocation.Text, txtName.Text)))
+            if (!Directory.Exists(Path.Combine(WorkspacePath, txtName.Text)))
             {
-                var path = Path.Combine(txtLocation.Text, txtName.Text);
-                Directory.CreateDirectory(path);
+                Directory.CreateDirectory(Path.Combine(WorkspacePath, txtName.Text));
                 switch (lstProjTemplate.SelectedIndices[0])
                 {
                     case 0:
-                        CreateEmptyProject(Path.Combine(path, txtName.Text + ".fitproj"));
+                        CreateEmptyProject(Path.Combine(WorkspacePath, txtName.Text, txtName.Text + ".fitproj"));
                         break;
                     case 1:
                         // DecompileNewProject();
@@ -102,16 +115,35 @@ namespace Sm4shCommand.GUI
 
         private void CreateEmptyProject(string path)
         {
-            WorkspaceManager manager = MainForm.Instance.WorkspaceManager;
-            // manager.NewWorkspace(txtWorkspace.Text);
+            if (txtWorkspace.Enabled && Manager.TargetWorkspace == null)
+            {
+                Manager.CreateNewWorkspace(Path.Combine(WorkspacePath, txtWorkspace.Text + ".wrkspc"));
+            }
 
-            var p = new FitProj();
-            p.ProjName = txtName.Text;
-            p.Platform = ProjPlatform.WiiU;
-            p.ToolVer = Program.Version;
-            p.GameVer = "1.1.7";
+            var p = new FitProj
+            {
+                ProjFilepath = path,
+                ProjName = txtName.Text,
+                Platform = ProjPlatform.WiiU,
+                ToolVer = Program.Version,
+                GameVer = "1.1.7",
+                ProjectGuid = Guid.NewGuid()
+            };
 
-            p.SaveProject(path);
+            Manager.AddProject(p);
+        }
+
+        private void txtLocation_TextChanged(object sender, EventArgs e)
+        {
+            if (Directory.Exists(Path.Combine($"{txtLocation.Text}", txtWorkspace.Text, txtName.Text)))
+            {
+                int i = 1;
+                while (Directory.Exists(Path.Combine($"{txtLocation.Text}", txtWorkspace.Text, txtName.Text + i)))
+                {
+                    i++;
+                }
+                txtName.Text = txtName.Text + i;
+            }
         }
     }
 }

@@ -12,7 +12,7 @@ namespace Sm4shCommand
     {
         public static string CanonicalizePath(string path)
         {
-            return path.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
+            return path.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar).TrimStart(Path.DirectorySeparatorChar).Trim();
         }
         public static void LogMessage(string message)
         {

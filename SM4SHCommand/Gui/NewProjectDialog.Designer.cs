@@ -61,6 +61,7 @@
             this.txtLocation.Name = "txtLocation";
             this.txtLocation.Size = new System.Drawing.Size(433, 20);
             this.txtLocation.TabIndex = 2;
+            this.txtLocation.TextChanged += new System.EventHandler(this.txtLocation_TextChanged);
             // 
             // txtName
             // 
