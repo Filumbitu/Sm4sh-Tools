@@ -11,7 +11,7 @@ namespace Sm4shCommand.GUI.Nodes
 {
     public class ProjectExplorerNode : TreeNode
     {
-        public static ContextMenuStrip _menu;
+        private static ContextMenuStrip _menu;
         static ProjectExplorerNode()
         {
             _menu = new ContextMenuStrip();
@@ -95,9 +95,10 @@ namespace Sm4shCommand.GUI.Nodes
 
     public class ProjectFolderNode : ProjectExplorerNode
     {
+        private static ContextMenuStrip _menu;
         static ProjectFolderNode()
         {
-            _menu.Items.Clear();
+            _menu = new ContextMenuStrip();
             _menu.Items.Add(new ToolStripMenuItem("Add", null,
                                                  new ToolStripMenuItem("Existing Item", null, ImportFileAction),
                                                  new ToolStripMenuItem("New Item", null, NewFileAction),
@@ -109,18 +110,19 @@ namespace Sm4shCommand.GUI.Nodes
         }
         public ProjectFolderNode()
         {
+            this.ContextMenuStrip = _menu;
             this.ImageIndex = this.SelectedImageIndex = 0;
         }
 
-        private static void NewFileAction(object sender, EventArgs e)
+        protected static void NewFileAction(object sender, EventArgs e)
         {
             GetInstance<ProjectFolderNode>().NewFile();
         }
-        private static void ImportFileAction(object sender, EventArgs e)
+        protected static void ImportFileAction(object sender, EventArgs e)
         {
             GetInstance<ProjectFolderNode>().ImportFile();
         }
-        private static void AddFolderAction(object sender, EventArgs e)
+        protected static void AddFolderAction(object sender, EventArgs e)
         {
             GetInstance<ProjectFolderNode>().AddFolder();
         }
@@ -219,8 +221,16 @@ namespace Sm4shCommand.GUI.Nodes
     }
     public class ProjectFileNode : ProjectExplorerNode
     {
+        private static ContextMenuStrip _menu;
+        static ProjectFileNode()
+        {
+            _menu = new ContextMenuStrip();
+            _menu.Items.Add("Rename", null, RenameAction);
+            _menu.Items.Add("Delete", null, DeleteAction);
+        }
         public ProjectFileNode()
         {
+            this.ContextMenuStrip = _menu;
             this.ImageIndex = this.SelectedImageIndex = 1;
         }
 
@@ -237,13 +247,28 @@ namespace Sm4shCommand.GUI.Nodes
     // Inherit from folder as the proj file is treated as one
     public class ProjectNode : ProjectFolderNode
     {
-        public ProjectNode() { }
-        public ProjectNode(Project p)
+        private static ContextMenuStrip _menu;
+        static ProjectNode()
+        {
+            _menu = new ContextMenuStrip();
+            _menu.Items.Add(new ToolStripMenuItem("Add", null,
+                                                 new ToolStripMenuItem("Existing Item", null, ImportFileAction),
+                                                 new ToolStripMenuItem("New Item", null, NewFileAction),
+                                                 new ToolStripMenuItem("New Folder", null, AddFolderAction))
+
+                           );
+            _menu.Items.Add("Rename", null, RenameAction);
+            _menu.Items.Add("Delete", null, DeleteAction);
+        }
+        public ProjectNode()
+        {
+            this.ContextMenuStrip = _menu;
+            this.ImageIndex = this.SelectedImageIndex = 3;
+        }
+        public ProjectNode(Project p) : this()
         {
             this.Project = p;
             this.Text = p.ProjName;
-            this.ContextMenuStrip = _menu;
-            this.ImageIndex = this.SelectedImageIndex = 3;
         }
 
         public Project Project { get; private set; }

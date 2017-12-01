@@ -94,15 +94,14 @@ namespace Sm4shCommand
         public void PopulateTreeView()
         {
             Tree.treeView1.BeginUpdate();
-            TreeNode workspaceNode = null;
+            WorkspaceNode _workspaceNode = null;
 
             // If we're actually opening a full workspace and
             // not just a single project, add all projects
             // as children to the workspace
             if (!string.IsNullOrEmpty(TargetWorkspace.WorkspaceName))
             {
-                workspaceNode = new TreeNode(TargetWorkspace.WorkspaceName);
-                workspaceNode.ImageIndex = workspaceNode.SelectedImageIndex = 2;
+                _workspaceNode = new WorkspaceNode() { Text = TargetWorkspace.WorkspaceName };
             }
 
             foreach (var pair in TargetWorkspace.Projects)
@@ -175,13 +174,13 @@ namespace Sm4shCommand
                     nodeToAddTo = projNode;
                 }
 
-                if (workspaceNode != null)
-                    workspaceNode.Nodes.Add(projNode);
+                if (_workspaceNode != null)
+                    _workspaceNode.Nodes.Add(projNode);
                 else
                     Tree.treeView1.Nodes.Add(projNode);
             }
-            if (workspaceNode != null)
-                Tree.treeView1.Nodes.Add(workspaceNode);
+            if (_workspaceNode != null)
+                Tree.treeView1.Nodes.Add(_workspaceNode);
 
             Tree.treeView1.EndUpdate();
         }
