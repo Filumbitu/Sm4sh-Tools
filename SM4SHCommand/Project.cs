@@ -51,7 +51,7 @@ namespace Sm4shCommand
                 return false;
         }
 
-        public void AddFile(string filepath)
+        public void AddFile(string filepath, bool saveProject)
         {
             var item = new ProjectItem
             {
@@ -59,7 +59,13 @@ namespace Sm4shCommand
                 RelativePath = filepath.Replace(ProjDirectory, "").TrimStart(Path.DirectorySeparatorChar)
             };
             Includes.Add(item);
-            SaveProject();
+
+            if (saveProject)
+                SaveProject();
+        }
+        public void AddFile(string filepath)
+        {
+            AddFile(filepath, true);
         }
         public void RemoveFolder(string path)
         {

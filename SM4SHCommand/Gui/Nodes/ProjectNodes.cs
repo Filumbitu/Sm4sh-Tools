@@ -46,7 +46,7 @@ namespace Sm4shCommand.GUI.Nodes
                 else if (this.Tag is FileInfo)
                 {
                     string path = ((FileInfo)this.Tag).FullName;
-                    ProjectNode.Project.RemoveFile(path);
+                    ProjectNode.Project.RemoveFile(Util.CanonicalizePath(this.FullPath.Replace(ProjectNode.FullPath, "").TrimStart(Path.DirectorySeparatorChar)));
                     if (File.Exists(path))
                         ((FileInfo)this.Tag).Delete();
                 }
@@ -187,34 +187,49 @@ namespace Sm4shCommand.GUI.Nodes
 
         public void ImportFile()
         {
-            using (var ofd = new OpenFileDialog())
+            using (var ofd = new OpenFileDialog() { Multiselect = true })
             {
                 if (ofd.ShowDialog() == DialogResult.OK)
                 {
-                    foreach (TreeNode n in this.Nodes)
+                    this.TreeView.BeginUpdate();
+
+                    // Only query these properties once, iterating over 
+                    // them is really slow due to getter functions
+                    string[] safeNames = ofd.SafeFileNames;
+                    string[] filenames = ofd.FileNames;
+
+                    // Iterating over the copies has 
+                    // minimal performance impact
+                    for (int i = 0; i < filenames.Length; i++)
                     {
-                        if (n.Text == ofd.SafeFileName)
+                        string _sfname = safeNames[i];
+                        string _fname = filenames[i];
+                        foreach (TreeNode n in this.Nodes)
                         {
-                            MessageBox.Show("A file with this name already exists!");
-                            return;
+                            if (n.Text == _sfname)
+                            {
+                                MessageBox.Show("A file with this name already exists!");
+                                return;
+                            }
                         }
+
+                        string path = "";
+                        if (this is ProjectNode)
+                            path = Path.Combine(Path.GetDirectoryName((((FileInfo)this.Tag).FullName)), _sfname);
+                        else
+                            path = Path.Combine((((DirectoryInfo)this.Tag).FullName), _sfname);
+
+                        ProjectNode.Project.AddFile(path, false);
+                        File.Copy(_fname, path);
+                        var node = new ProjectFileNode()
+                        {
+                            Tag = new FileInfo(path)
+                        };
+                        node.Text = _sfname;
+                        Nodes.Add(node);
                     }
-
-                    string path = "";
-                    if (this is ProjectNode)
-                        path = Path.Combine(Path.GetDirectoryName((((FileInfo)this.Tag).FullName)), ofd.SafeFileName);
-                    else
-                        path = Path.Combine((((DirectoryInfo)this.Tag).FullName), ofd.SafeFileName);
-
-                    ProjectNode.Project.AddFile(path);
-                    File.Copy(ofd.FileName, path);
-                    var node = new ProjectFileNode()
-                    {
-                        Tag = new FileInfo(path)
-                    };
-                    node.Text = ofd.SafeFileName;
-                    Nodes.Add(node);
-                    node.EnsureVisible();
+                    this.TreeView.EndUpdate();
+                    ProjectNode.Project.SaveProject();
                 }
             }
         }

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.13
+VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SM4SHCommand", "SM4SHCommand\SM4SHCommand.csproj", "{A79B3C25-FB69-4AF3-BFD2-F9D1451BF2CD}"
 EndProject
@@ -72,5 +72,8 @@ Global
 		{67416765-5AA1-47BE-BFAA-9186BA2D2AB9} = {F2E7A101-8CD5-4004-8DE6-75BEDD45C059}
 		{CA2F70F1-6869-40FC-991F-C1E27DC577EF} = {F2E7A101-8CD5-4004-8DE6-75BEDD45C059}
 		{E86899D7-D46D-470B-BB96-78C1B427384B} = {A8655E27-E6A2-4A00-AC99-26DFDB15042F}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C9A5B09A-0876-4538-AF0F-9AF5EC6AB598}
 	EndGlobalSection
 EndGlobal
