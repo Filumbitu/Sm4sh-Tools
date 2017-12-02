@@ -37,10 +37,6 @@
             this.btnBrowse = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btnCancel = new System.Windows.Forms.Button();
-            this.chkNewDir = new System.Windows.Forms.CheckBox();
-            this.chkCurWorkspace = new System.Windows.Forms.CheckBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
             this.txtWorkspace = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -105,18 +101,16 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnBrowse.Location = new System.Drawing.Point(518, 74);
             this.btnBrowse.Name = "btnBrowse";
-            this.btnBrowse.Size = new System.Drawing.Size(27, 23);
+            this.btnBrowse.Size = new System.Drawing.Size(27, 25);
             this.btnBrowse.TabIndex = 3;
             this.btnBrowse.Text = "...";
             this.btnBrowse.UseVisualStyleBackColor = true;
+            this.btnBrowse.Click += new System.EventHandler(this.btnBrowse_Click);
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.btnOkay);
             this.groupBox1.Controls.Add(this.btnCancel);
-            this.groupBox1.Controls.Add(this.chkNewDir);
-            this.groupBox1.Controls.Add(this.chkCurWorkspace);
-            this.groupBox1.Controls.Add(this.label5);
-            this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.txtWorkspace);
             this.groupBox1.Controls.Add(this.txtName);
             this.groupBox1.Controls.Add(this.btnBrowse);
@@ -125,9 +119,9 @@
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.groupBox1.Location = new System.Drawing.Point(0, 234);
+            this.groupBox1.Location = new System.Drawing.Point(0, 231);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(566, 148);
+            this.groupBox1.Size = new System.Drawing.Size(566, 150);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             // 
@@ -135,63 +129,13 @@
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCancel.Location = new System.Drawing.Point(483, 121);
+            this.btnCancel.Location = new System.Drawing.Point(483, 113);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnCancel.Size = new System.Drawing.Size(75, 25);
             this.btnCancel.TabIndex = 7;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.button4_Click);
-            // 
-            // chkNewDir
-            // 
-            this.chkNewDir.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkNewDir.AutoSize = true;
-            this.chkNewDir.Checked = true;
-            this.chkNewDir.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkNewDir.Location = new System.Drawing.Point(239, 109);
-            this.chkNewDir.Name = "chkNewDir";
-            this.chkNewDir.Size = new System.Drawing.Size(15, 14);
-            this.chkNewDir.TabIndex = 4;
-            this.chkNewDir.UseVisualStyleBackColor = true;
-            // 
-            // chkCurWorkspace
-            // 
-            this.chkCurWorkspace.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.chkCurWorkspace.AutoSize = true;
-            this.chkCurWorkspace.Location = new System.Drawing.Point(239, 129);
-            this.chkCurWorkspace.Name = "chkCurWorkspace";
-            this.chkCurWorkspace.Size = new System.Drawing.Size(15, 14);
-            this.chkCurWorkspace.TabIndex = 5;
-            this.chkCurWorkspace.UseVisualStyleBackColor = true;
-            // 
-            // label5
-            // 
-            this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(76, 110);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(157, 13);
-            this.label5.TabIndex = 3;
-            this.label5.Text = "Create directory for Workspace:";
-            // 
-            // label3
-            // 
-            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(98, 128);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(135, 13);
-            this.label3.TabIndex = 3;
-            this.label3.Text = "Add to current Workspace:";
             // 
             // txtWorkspace
             // 
@@ -221,7 +165,7 @@
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox2.Location = new System.Drawing.Point(0, 0);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(566, 234);
+            this.groupBox2.Size = new System.Drawing.Size(566, 231);
             this.groupBox2.TabIndex = 4;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Project Types";
@@ -238,7 +182,7 @@
             this.lstProjTemplate.Location = new System.Drawing.Point(3, 16);
             this.lstProjTemplate.MultiSelect = false;
             this.lstProjTemplate.Name = "lstProjTemplate";
-            this.lstProjTemplate.Size = new System.Drawing.Size(560, 215);
+            this.lstProjTemplate.Size = new System.Drawing.Size(560, 212);
             this.lstProjTemplate.SmallImageList = this.imageList1;
             this.lstProjTemplate.TabIndex = 0;
             this.lstProjTemplate.UseCompatibleStateImageBehavior = false;
@@ -261,9 +205,9 @@
             // 
             this.btnOkay.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOkay.Location = new System.Drawing.Point(402, 355);
+            this.btnOkay.Location = new System.Drawing.Point(402, 113);
             this.btnOkay.Name = "btnOkay";
-            this.btnOkay.Size = new System.Drawing.Size(75, 23);
+            this.btnOkay.Size = new System.Drawing.Size(75, 25);
             this.btnOkay.TabIndex = 6;
             this.btnOkay.Text = "Okay";
             this.btnOkay.UseVisualStyleBackColor = true;
@@ -273,8 +217,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(566, 382);
-            this.Controls.Add(this.btnOkay);
+            this.ClientSize = new System.Drawing.Size(566, 381);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.MaximizeBox = false;
@@ -306,10 +249,6 @@
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ImageList imageList1;
-        private System.Windows.Forms.CheckBox chkNewDir;
-        private System.Windows.Forms.CheckBox chkCurWorkspace;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox txtWorkspace;
         private System.Windows.Forms.Label label4;
     }

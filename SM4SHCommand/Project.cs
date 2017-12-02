@@ -157,55 +157,63 @@ namespace Sm4shCommand
 
         public override void ReadProject(string filepath)
         {
-            ProjFilepath = filepath;
-            var proj = new XmlDocument();
-            proj.Load(filepath);
-
-            var node = proj.SelectSingleNode("//Project");
-            this.ToolVer = node.Attributes["ToolVersion"].Value;
-            this.GameVer = node.Attributes["GameVersion"].Value;
-            this.ProjName = node.Attributes["Name"].Value;
-            this.ProjectGuid = Guid.Parse(proj.SelectSingleNode("//Project/ProjectGUID").InnerText);
-
-            if (node.Attributes["Platform"].Value == "WiiU")
-                this.Platform = ProjPlatform.WiiU;
-            else if (node.Attributes["Platform"].Value == "3DS")
-                this.Platform = ProjPlatform.ThreeDS;
-
-            var nodes = proj.SelectNodes("//Project/FileGroup");
-            foreach (XmlNode n in nodes)
+            try
             {
-                foreach (XmlNode child in n.ChildNodes)
-                {
-                    var item = new ProjectItem
-                    {
-                        RelativePath = Util.CanonicalizePath(child.Attributes["Include"].Value)
-                    };
-                    item.RealPath = Util.CanonicalizePath(Path.Combine(ProjDirectory, item.RelativePath.Trim(Path.DirectorySeparatorChar)));
+                Util.LogMessage($"Loading project {filepath}..");
+                ProjFilepath = filepath;
+                var proj = new XmlDocument();
+                proj.Load(filepath);
 
-                    if (child.HasChildNodes)
+                var node = proj.SelectSingleNode("//Project");
+                this.ToolVer = node.Attributes["ToolVersion"].Value;
+                this.GameVer = node.Attributes["GameVersion"].Value;
+                this.ProjName = node.Attributes["Name"].Value;
+                this.ProjectGuid = Guid.Parse(proj.SelectSingleNode("//Project/ProjectGUID").InnerText);
+
+                if (node.Attributes["Platform"].Value == "WiiU")
+                    this.Platform = ProjPlatform.WiiU;
+                else if (node.Attributes["Platform"].Value == "3DS")
+                    this.Platform = ProjPlatform.ThreeDS;
+
+                var nodes = proj.SelectNodes("//Project/FileGroup");
+                foreach (XmlNode n in nodes)
+                {
+                    foreach (XmlNode child in n.ChildNodes)
                     {
-                        // foreach (XmlNode child2 in child.ChildNodes)
-                        // {
-                        //     if (child2.LocalName == "DependsUpon")
-                        //     {
-                        //         var path = Util.CanonicalizePath(Path.Combine(Path.GetDirectoryName(item.RelativePath), child2.InnerText));
-                        //         item.Depends.Add(IncludedFiles.Find(x => x.RelativePath == path));
-                        //     }
-                        // }
-                    }
-                    if (child.Name == "Folder")
-                    {
-                        item.IsDirectory = true;
-                        Includes.Add(item);
-                    }
-                    else if (child.Name == "Content")
-                    {
-                        Includes.Add(item);
+                        var item = new ProjectItem
+                        {
+                            RelativePath = Util.CanonicalizePath(child.Attributes["Include"].Value)
+                        };
+                        item.RealPath = Util.CanonicalizePath(Path.Combine(ProjDirectory, item.RelativePath.Trim(Path.DirectorySeparatorChar)));
+
+                        if (child.HasChildNodes)
+                        {
+                            // foreach (XmlNode child2 in child.ChildNodes)
+                            // {
+                            //     if (child2.LocalName == "DependsUpon")
+                            //     {
+                            //         var path = Util.CanonicalizePath(Path.Combine(Path.GetDirectoryName(item.RelativePath), child2.InnerText));
+                            //         item.Depends.Add(IncludedFiles.Find(x => x.RelativePath == path));
+                            //     }
+                            // }
+                        }
+                        if (child.Name == "Folder")
+                        {
+                            item.IsDirectory = true;
+                            Includes.Add(item);
+                        }
+                        else if (child.Name == "Content")
+                        {
+                            Includes.Add(item);
+                        }
                     }
                 }
+                ProjFile = proj;
             }
-            ProjFile = proj;
+            catch (Exception e)
+            {
+                Util.LogMessage($"Error loading project: {e.Message}", ConsoleColor.Red);
+            }
         }
         public override void SaveProject(string filepath)
         {

@@ -30,6 +30,10 @@ namespace Sm4shCommand
             InitializeComponent();
             this.Text = $"{Program.AssemblyTitle} {Program.Version} BETA - ";
 
+            // prevents crashing if we dont have any components on mainform
+            if (this.components == null)
+                this.components = new Container();
+
             RecentFileHandler = new RecentFileHandler(this.components)
             {
                 RecentFileToolStripItem = this.recentFilesStripMenuItem

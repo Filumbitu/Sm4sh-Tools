@@ -41,8 +41,7 @@ namespace Sm4shCommand.GUI
 
             if (Manager.TargetWorkspace != null)
             {
-                chkCurWorkspace.Checked = true;
-                chkNewDir.Checked = txtWorkspace.Enabled = false;
+                txtWorkspace.Enabled = false;
                 txtLocation.Text = Manager.TargetWorkspace.WorkspaceRoot;
             }
             else
@@ -143,6 +142,17 @@ namespace Sm4shCommand.GUI
                     i++;
                 }
                 txtName.Text = txtName.Text + i;
+            }
+        }
+
+        private void btnBrowse_Click(object sender, EventArgs e)
+        {
+            using(var dlg = new FolderSelectDialog())
+            {
+                if(dlg.ShowDialog() == DialogResult.OK)
+                {
+                    txtLocation.Text = dlg.SelectedPath;
+                }
             }
         }
     }
