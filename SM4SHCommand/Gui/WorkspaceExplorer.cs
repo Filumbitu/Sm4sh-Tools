@@ -31,7 +31,7 @@ namespace Sm4shCommand.GUI
             }
             else
             {
-                ((Nodes.ProjectExplorerNode)e.Node).EndRename(e.Label);
+                ((ProjectExplorerNode)e.Node).EndRename(e.Label);
             }
         }
 

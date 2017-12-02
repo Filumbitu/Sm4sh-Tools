@@ -33,7 +33,6 @@
         '\"',
         '\'',
         '\''};
-            this.ITS_EDITOR1.AutocompleteMenu = null;
             this.ITS_EDITOR1.AutoScrollMinSize = new System.Drawing.Size(115, 14);
             this.ITS_EDITOR1.BackBrush = null;
             this.ITS_EDITOR1.CharHeight = 14;
@@ -45,7 +44,6 @@
             this.ITS_EDITOR1.Location = new System.Drawing.Point(0, 0);
             this.ITS_EDITOR1.Name = "ITS_EDITOR1";
             this.ITS_EDITOR1.Paddings = new System.Windows.Forms.Padding(0);
-            this.ITS_EDITOR1.Script = null;
             this.ITS_EDITOR1.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.ITS_EDITOR1.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("ITS_EDITOR1.ServiceColors")));
             this.ITS_EDITOR1.Size = new System.Drawing.Size(284, 262);

@@ -122,9 +122,7 @@
     <Compile Include="System\Windows\Components\FolderSelectDialog.designer.cs">
       <DependentUpon>FolderSelectDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="System\Windows\Components\ITSCodeBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="System\Windows\Components\ITSCodeBox.cs" />
     <Compile Include="System\Windows\Components\ITSToolTip.cs" />
     <Compile Include="Util.cs" />
     <Compile Include="Workspace.cs" />
