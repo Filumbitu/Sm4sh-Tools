@@ -20,10 +20,11 @@ namespace Sm4shCommand
     {
         public static MainForm Instance
         {
-            get { return _instance ?? (_instance = new MainForm()); }
+            get { return _instance ?? new MainForm(); }
         }
         private static MainForm _instance;
         RecentFileHandler RecentFileHandler;
+        internal string OpenTarget { get; set; }
 
         public MainForm()
         {
@@ -34,10 +35,13 @@ namespace Sm4shCommand
             if (this.components == null)
                 this.components = new Container();
 
+            _instance = this;
+
             RecentFileHandler = new RecentFileHandler(this.components)
             {
                 RecentFileToolStripItem = this.recentFilesStripMenuItem
             };
+            recentFilesStripMenuItem.DropDownItemClicked += RecentFilesStripMenuItem_DropDownItemClicked;
         }
 
         public const string FileFilter =
@@ -74,10 +78,14 @@ namespace Sm4shCommand
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+
             Explorer = new WorkspaceExplorer();
             AddDockedControl(Explorer, DockState.DockRight);
             AddDockedControl(new CodeEditor() { TabText = "Editor" }, DockState.Document);
             WorkspaceManager = new WorkspaceManager(Explorer);
+
+            if (!string.IsNullOrEmpty(OpenTarget))
+                OpenFile(OpenTarget);
         }
 
         private void ProjectToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -86,20 +94,38 @@ namespace Sm4shCommand
             dlg.ShowDialog();
         }
 
+        /// <summary>
+        /// Opens a file for reading by the application
+        /// </summary>
+        /// <param name="filename">Path to the file.</param>
+        /// <returns>Returns true if successful</returns>
+        private bool OpenFile(string filename)
+        {
+            try
+            {
+                switch (filename.Substring(filename.IndexOf('.')))
+                {
+                    case ".wrkspc":
+                        WorkspaceManager.OpenWorkspace(filename);
+                        break;
+                    case ".fitproj":
+                        WorkspaceManager.OpenProject(filename);
+                        break;
+                }
+                RecentFileHandler.AddFile(ofDlg.FileName);
+                return true;
+            }
+            catch (Exception x)
+            {
+                Util.LogMessage($"Error opening file {filename}: {x.Message}");
+            }
+            return false;
+        }
         private void FOpen_Click(object sender, EventArgs e)
         {
             if (ofDlg.ShowDialog() == DialogResult.OK)
             {
-                switch (ofDlg.FileName.Substring(ofDlg.FileName.IndexOf('.')))
-                {
-                    case ".wrkspc":
-                        WorkspaceManager.OpenWorkspace(ofDlg.FileName);
-                        break;
-                    case ".fitproj":
-                        WorkspaceManager.OpenProject(ofDlg.FileName);
-                        break;
-                }
-                RecentFileHandler.AddFile(ofDlg.FileName);
+                OpenFile(ofDlg.FileName);
             }
         }
 
@@ -109,7 +135,7 @@ namespace Sm4shCommand
         }
         private void RecentFilesStripMenuItem_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            Program.Open(((RecentFileHandler.FileMenuItem)e.ClickedItem).FileName);
+           OpenFile(((RecentFileHandler.FileMenuItem)e.ClickedItem).FileName);
         }
     }
 }
