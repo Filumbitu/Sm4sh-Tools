@@ -12,6 +12,19 @@ namespace Sm4shCommand.GUI.Nodes
     public class ProjectExplorerNode : TreeNode
     {
         private static ContextMenuStrip _menu;
+        public TreeNode RootNode
+        {
+            get
+            {
+                TreeNode n = this;
+                if (this.Parent != null)
+                {
+                    while (n != null)
+                        return n = n.Parent;
+                }
+                return n;
+            }
+        }
         static ProjectExplorerNode()
         {
             _menu = new ContextMenuStrip();
@@ -302,6 +315,7 @@ namespace Sm4shCommand.GUI.Nodes
         public override void EndRename(string newname)
         {
             Project.RenameProject(newname);
+            this.Text = newname;
         }
     }
 }

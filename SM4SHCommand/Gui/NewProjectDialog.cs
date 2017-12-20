@@ -17,6 +17,7 @@ namespace Sm4shCommand.GUI
             InitializeComponent();
 
         }
+
         private WorkspaceManager Manager { get; set; }
         private string WorkspacePath
         {
@@ -28,6 +29,7 @@ namespace Sm4shCommand.GUI
                     return Manager.TargetWorkspace.WorkspaceRoot;
             }
         }
+
         private void button4_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
@@ -70,18 +72,12 @@ namespace Sm4shCommand.GUI
             if (!Directory.Exists(Path.Combine(WorkspacePath, txtName.Text)))
             {
                 Directory.CreateDirectory(Path.Combine(WorkspacePath, txtName.Text));
-                switch (lstProjTemplate.SelectedIndices[0])
+                if (txtWorkspace.Enabled && Manager.TargetWorkspace == null)
                 {
-                    case 0:
-                        CreateEmptyProject(Path.Combine(WorkspacePath, txtName.Text, txtName.Text + ".fitproj"));
-                        break;
-                    case 1:
-                        // DecompileNewProject();
-                        break;
-                    case 2:
-                        // ProjectFromExistingFiles();
-                        break;
+                    Manager.CreateNewWorkspace(Path.Combine(WorkspacePath, txtWorkspace.Text + ".wrkspc"));
                 }
+                var template = (IProjectTemplate)lstProjTemplate.Items[lstProjTemplate.SelectedIndices[0]].Tag;
+                Manager.AddProject(template.CreateProject(Path.Combine(WorkspacePath, txtName.Text, txtName.Text + ".fitproj"), txtName.Text, Manager));
             }
             else
             {
@@ -96,20 +92,21 @@ namespace Sm4shCommand.GUI
         {
             // init default project templates
             Font f = new Font(FontFamily.GenericSansSerif, 11, FontStyle.Regular);
-            ListViewItem lvi = new ListViewItem("New Empty Project");
-            lvi.Font = f;
-            lvi.ImageIndex = 1;
-            lstProjTemplate.Items.Add(lvi);
+            for (int i = 0; i < GLOBALS.ProjectTemplates.Length; i++)
+            {
+                IProjectTemplate template = GLOBALS.ProjectTemplates[i];
 
-            lvi = new ListViewItem("Decompile New Project");
-            lvi.Font = f;
-            lvi.ImageIndex = 2;
-            lstProjTemplate.Items.Add(lvi);
+                if (template.TemplateIcon != null)
+                {
+                    imageList1.Images.Add(template.TemplateIcon);
+                }
 
-            lvi = new ListViewItem("Project From Existing Files");
-            lvi.Font = f;
-            lvi.ImageIndex = 0;
-            lstProjTemplate.Items.Add(lvi);
+                ListViewItem lvi = new ListViewItem(template.DisplayText);
+                lvi.Tag = template;
+                lvi.Font = f;
+                lvi.ImageIndex = i;
+                lstProjTemplate.Items.Add(lvi);
+            }
         }
 
         private void CreateEmptyProject(string path)
@@ -147,9 +144,9 @@ namespace Sm4shCommand.GUI
 
         private void btnBrowse_Click(object sender, EventArgs e)
         {
-            using(var dlg = new FolderSelectDialog())
+            using (var dlg = new FolderSelectDialog())
             {
-                if(dlg.ShowDialog() == DialogResult.OK)
+                if (dlg.ShowDialog() == DialogResult.OK)
                 {
                     txtLocation.Text = dlg.SelectedPath;
                 }
