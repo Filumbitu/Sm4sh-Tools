@@ -15,6 +15,7 @@ namespace Sm4shCommand
 
         Project CreateProject(string filepath, string name, WorkspaceManager manager);
     }
+
     public class EmptyProjectTemplate : IProjectTemplate
     {
         public EmptyProjectTemplate()

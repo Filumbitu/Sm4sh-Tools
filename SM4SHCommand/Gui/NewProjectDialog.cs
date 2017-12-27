@@ -29,6 +29,20 @@ namespace Sm4shCommand.GUI
                     return Manager.TargetWorkspace.WorkspaceRoot;
             }
         }
+        private IProjectTemplate SelectedTemplate
+        {
+            get
+            {
+                if(lstProjTemplate.SelectedIndices.Count > 0)
+                {
+                    return (IProjectTemplate)lstProjTemplate.Items[lstProjTemplate.SelectedIndices[0]].Tag;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
 
         private void button4_Click(object sender, EventArgs e)
         {
@@ -76,8 +90,11 @@ namespace Sm4shCommand.GUI
                 {
                     Manager.CreateNewWorkspace(Path.Combine(WorkspacePath, txtWorkspace.Text + ".wrkspc"));
                 }
-                var template = (IProjectTemplate)lstProjTemplate.Items[lstProjTemplate.SelectedIndices[0]].Tag;
-                Manager.AddProject(template.CreateProject(Path.Combine(WorkspacePath, txtName.Text, txtName.Text + ".fitproj"), txtName.Text, Manager));
+
+                if (SelectedTemplate != null)
+                {
+                    Manager.AddProject(SelectedTemplate.CreateProject(Path.Combine(WorkspacePath, txtName.Text, txtName.Text + ".fitproj"), txtName.Text, Manager));
+                }
             }
             else
             {
@@ -90,6 +107,8 @@ namespace Sm4shCommand.GUI
 
         private void InitializeProjectTemplates()
         {
+            imageList1.Images.Clear();
+
             // init default project templates
             Font f = new Font(FontFamily.GenericSansSerif, 11, FontStyle.Regular);
             for (int i = 0; i < GLOBALS.ProjectTemplates.Length; i++)
@@ -104,29 +123,9 @@ namespace Sm4shCommand.GUI
                 ListViewItem lvi = new ListViewItem(template.DisplayText);
                 lvi.Tag = template;
                 lvi.Font = f;
-                lvi.ImageIndex = i;
+
                 lstProjTemplate.Items.Add(lvi);
             }
-        }
-
-        private void CreateEmptyProject(string path)
-        {
-            if (txtWorkspace.Enabled && Manager.TargetWorkspace == null)
-            {
-                Manager.CreateNewWorkspace(Path.Combine(WorkspacePath, txtWorkspace.Text + ".wrkspc"));
-            }
-
-            var p = new FitProj
-            {
-                ProjFilepath = path,
-                ProjName = txtName.Text,
-                Platform = ProjPlatform.WiiU,
-                ToolVer = Program.Version,
-                GameVer = "1.1.7",
-                ProjectGuid = Guid.NewGuid()
-            };
-
-            Manager.AddProject(p);
         }
 
         private void txtLocation_TextChanged(object sender, EventArgs e)

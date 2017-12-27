@@ -99,8 +99,8 @@
     <Compile Include="GUI\WorkspaceExplorer.Designer.cs">
       <DependentUpon>WorkspaceExplorer.cs</DependentUpon>
     </Compile>
-    <Compile Include="Project.cs" />
-    <Compile Include="ProjectTemplate.cs" />
+    <Compile Include="Projects\Project.cs" />
+    <Compile Include="Projects\ProjectTemplate.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -126,7 +126,7 @@
     <Compile Include="System\Windows\Components\ITSCodeBox.cs" />
     <Compile Include="System\Windows\Components\ITSToolTip.cs" />
     <Compile Include="Util.cs" />
-    <Compile Include="Workspace.cs" />
+    <Compile Include="Projects\Workspace.cs" />
     <Compile Include="WorkspaceManager.cs" />
     <EmbeddedResource Include="GUI\AboutBox.resx">
       <DependentUpon>AboutBox.cs</DependentUpon>
